@@ -1,0 +1,82 @@
+{
+    "name": "jobmetric/media",
+    "description": "This package is for keeping the files of different Laravel projects.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "jobmetric",
+        "package",
+        "media",
+        "file",
+        "files",
+        "mediadata"
+    ],
+    "homepage": "https://doc.jobmetric.net/package/media",
+    "authors": [
+        {
+            "name": "Majid Mohammadian",
+            "email": "majeedmohammadian@gmail.com",
+            "homepage": "https://www.linkedin.com/in/majidmohammadian/",
+            "role": "Full Stack Developer"
+        },
+        {
+            "name": "Alireza Mir Esmaili",
+            "email": "alirezamires@gmail.com",
+            "homepage": "https://www.linkedin.com/in/alirezamires/",
+            "role": "Full Stack Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "ext-json": "*",
+        "laravel/framework": ">=9.19"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "pestphp/pest": "^2.0"
+    },
+    "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
+        "psr-4": {
+            "JobMetric\\Media\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "JobMetric\\Media\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest --colors=always",
+        "test-coverage": "vendor/bin/pest --coverage-html coverage"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "JobMetric\\Media\\Providers\\MediaServiceProvider"
+            ],
+            "aliases": {
+                "JMedia": "JobMetric\\Media\\Facades\\MediaService"
+            }
+        }
+    },
+    "minimum-stability": "stable",
+    "support": {
+        "issues": "https://github.com/jobmetric/media/issues",
+        "forum": "https://twitter.com/jobmetric",
+        "source": "https://github.com/jobmetric/media"
+    },
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/majidmohammadian"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/alirezamires"
+        }
+    ]
+}

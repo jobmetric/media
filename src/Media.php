@@ -7,7 +7,7 @@ use JobMetric\Media\Object\File;
 use JobMetric\Media\Object\Category;
 use JobMetric\Media\Object\Common;
 
-class MediaService
+class Media
 {
     /**
      * The application instance.

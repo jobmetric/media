@@ -1,6 +1,6 @@
 <?php
 
-namespace JobMetric\Media\Object;
+namespace JobMetric\Media\Services;
 
 use Exception;
 use JMedia;

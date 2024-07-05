@@ -31,7 +31,8 @@
             "src/helpers.php"
         ],
         "psr-4": {
-            "JobMetric\\Media\\": "src/"
+            "JobMetric\\Media\\": "src/",
+            "JobMetric\\Media\\Factories\\": "database/factories/"
         }
     },
     "extra": {

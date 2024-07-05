@@ -9,8 +9,7 @@
         "package",
         "media",
         "file",
-        "files",
-        "mediadata"
+        "files"
     ],
     "homepage": "https://doc.jobmetric.net/package/media",
     "authors": [
@@ -19,22 +18,13 @@
             "email": "majeedmohammadian@gmail.com",
             "homepage": "https://www.linkedin.com/in/majidmohammadian/",
             "role": "Full Stack Developer"
-        },
-        {
-            "name": "Alireza Mir Esmaili",
-            "email": "alirezamires@gmail.com",
-            "homepage": "https://www.linkedin.com/in/alirezamires/",
-            "role": "Full Stack Developer"
         }
     ],
     "require": {
         "php": "^8.1",
         "ext-json": "*",
-        "laravel/framework": ">=9.19"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^10.0",
-        "pestphp/pest": "^2.0"
+        "laravel/framework": ">=9.19",
+        "jobmetric/laravel-package-core": "^1.7"
     },
     "autoload": {
         "files": [
@@ -44,22 +34,13 @@
             "JobMetric\\Media\\": "src/"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "JobMetric\\Media\\Tests\\": "tests/"
-        }
-    },
-    "scripts": {
-        "test": "vendor/bin/pest --colors=always",
-        "test-coverage": "vendor/bin/pest --coverage-html coverage"
-    },
     "extra": {
         "laravel": {
             "providers": [
-                "JobMetric\\Media\\Providers\\MediaServiceProvider"
+                "JobMetric\\Media\\MediaServiceProvider"
             ],
             "aliases": {
-                "JMedia": "JobMetric\\Media\\Facades\\MediaService"
+                "Media": "JobMetric\\Media\\Facades\\MediaService"
             }
         }
     },
@@ -68,15 +49,5 @@
         "issues": "https://github.com/jobmetric/media/issues",
         "forum": "https://twitter.com/jobmetric",
         "source": "https://github.com/jobmetric/media"
-    },
-    "funding": [
-        {
-            "type": "github",
-            "url": "https://github.com/sponsors/majidmohammadian"
-        },
-        {
-            "type": "github",
-            "url": "https://github.com/sponsors/alirezamires"
-        }
-    ]
+    }
 }

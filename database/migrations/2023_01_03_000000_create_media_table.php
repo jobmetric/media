@@ -31,65 +31,44 @@ return new class extends Migration {
             $table->string('mime_type')->nullable()->index();
             $table->unsignedBigInteger('size')->default(0)->index();
             /**
-             * if type=c -> size=0 else size>=0
+             * base on byte
+             *
+             * if the type=c -> size=0 else size>=0
              */
 
             $table->string('content_id', 40)->nullable()->unique()->index();
             /**
              * sha1 content file unique
+             *
+             * if the type=c -> content_id=null else content_id=sha1(file)
              */
 
             $table->json('additional')->nullable();
             /**
-             * user_id : 0 -> anonymous , x>0 -> user
+             * user_id: 0 -> anonymous, x>0 -> user
              * responsive
              * set icon for folder
              */
 
             $table->string('disk');
+            /**
+             * value: public, s3, ...
+             */
+
             $table->string('collection')->default('public')->index();
             /**
              * value: public, avatar, ...
              */
 
-            $table->string('filename')->unique();
+            $table->string('filename')->nullable()->unique();
             /**
              * filename = uuid + . + extension
+             *
+             * if the type=c -> filename=null else filename=uuid.extension
              */
 
             $table->softDeletes();
             $table->nullableTimestamps();
-        });
-
-        Schema::create('media_paths', function (Blueprint $table) {
-            $table->id();
-
-            $table->foreignId('media_id')->index()->constrained('media')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('path_id')->index()->constrained('media')->restrictOnDelete()->cascadeOnUpdate();
-            $table->integer('level')->default(0);
-
-            $table->unique([
-                'media_id',
-                'path_id'
-            ], 'MEDIA_PATH_UNIQUE');
-        });
-
-        // if media:type=f insert in media_relations
-        Schema::create('media_relations', function (Blueprint $table) {
-            $table->morphs('relatable');
-            /**
-             * relatable to: any model
-             */
-
-            $table->string('collection');
-            $table->foreignId('media_id')->nullable()->index()->constrained('media')->cascadeOnUpdate()->cascadeOnDelete();
-
-            $table->unique([
-                'relatable_type',
-                'relatable_id',
-                'collection',
-                'media_id'
-            ], 'FILE_RELATION_UNIQUE');
         });
     }
 
@@ -101,7 +80,5 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::dropIfExists('media');
-        Schema::dropIfExists('media_path');
-        Schema::dropIfExists('media_relations');
     }
 };

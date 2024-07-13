@@ -32,6 +32,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property MediaRelation[] mediaRelations
  *
  * @method static Builder ofCollection(string $collection)
+ * @method static find(int $media_id)
  */
 class Media extends Model
 {

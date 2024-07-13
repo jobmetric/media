@@ -13,7 +13,7 @@ return new class extends Migration {
     public function up(): void
     {
         // if media:type=f insert in media_relations
-        Schema::create('media_relations', function (Blueprint $table) {
+        Schema::create(config('media.tables.media_relations'), function (Blueprint $table) {
             $table->foreignId('media_id')->nullable()->index()->constrained('media')->cascadeOnUpdate()->cascadeOnDelete();
 
             $table->morphs('mediaable');
@@ -39,6 +39,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('media_relations');
+        Schema::dropIfExists(config('media.tables.media_relations'));
     }
 };

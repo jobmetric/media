@@ -13,22 +13,25 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('media', function (Blueprint $table) {
+        Schema::create(config('media.tables.media'), function (Blueprint $table) {
             $table->id();
 
             $table->string('name')->index();
 
             $table->foreignId('parent_id')->nullable()->constrained('media')->restrictOnDelete()->cascadeOnUpdate();
-            $table->enum('type', [
-                'c', // folder
-                'f'  // file
-            ])->index();
+
+            $table->enum('type', MediaTypeEnum::values())->index();
             /**
-             * value: folder, file
+             * value: 'c' for folder, 'f' for file
+             *
              * use: @extends MediaTypeEnum
              */
 
             $table->string('mime_type')->nullable()->index();
+            /**
+             * value: image/jpeg, application/pdf, ...
+             */
+
             $table->unsignedBigInteger('size')->default(0)->index();
             /**
              * base on byte
@@ -68,7 +71,7 @@ return new class extends Migration {
              */
 
             $table->softDeletes();
-            $table->nullableTimestamps();
+            $table->timestamps();
         });
     }
 
@@ -79,6 +82,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('media');
+        Schema::dropIfExists(config('media.tables.media'));
     }
 };

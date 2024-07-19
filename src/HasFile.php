@@ -87,7 +87,7 @@ trait HasFile
          */
         $media = Media::find($media_id);
 
-        if(!$media) {
+        if (!$media) {
             throw new MediaNotFoundException($media_id);
         }
 

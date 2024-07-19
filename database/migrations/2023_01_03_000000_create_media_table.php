@@ -53,14 +53,18 @@ return new class extends Migration {
              * set icon for folder
              */
 
-            $table->string('disk');
+            $table->string('disk')->nullable()->index();
             /**
              * value: public, s3, ...
+             *
+             * if the type=c -> disk=null else disk=any disk
              */
 
-            $table->string('collection')->default('public')->index();
+            $table->string('collection')->nullable()->default('public')->index();
             /**
              * value: public, avatar, ...
+             *
+             * if the type=c -> collection=null else collection=any collection
              */
 
             $table->string('filename')->nullable()->unique();

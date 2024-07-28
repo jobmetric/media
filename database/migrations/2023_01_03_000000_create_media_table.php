@@ -18,7 +18,7 @@ return new class extends Migration {
 
             $table->string('name')->index();
 
-            $table->foreignId('parent_id')->nullable()->constrained('media')->restrictOnDelete()->cascadeOnUpdate();
+            $table->foreignId('parent_id')->nullable()->constrained(config('media.tables.media'))->restrictOnDelete()->cascadeOnUpdate();
 
             $table->enum('type', MediaTypeEnum::values())->index();
             /**

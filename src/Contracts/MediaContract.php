@@ -1,6 +1,6 @@
 <?php
 
-namespace JobMetric\Translation\Contracts;
+namespace JobMetric\Media\Contracts;
 
 interface MediaContract
 {

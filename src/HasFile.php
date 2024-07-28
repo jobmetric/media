@@ -10,6 +10,7 @@ use JobMetric\Media\Exceptions\MediaNotFoundException;
 use JobMetric\Media\Exceptions\MediaRelationNotFoundException;
 use JobMetric\Media\Exceptions\MediaTypeNotMatchException;
 use JobMetric\Media\Exceptions\ModelMediaContractNotFoundException;
+use JobMetric\Media\Http\Resources\MediaResource;
 use JobMetric\Media\Models\Media;
 use Throwable;
 
@@ -20,6 +21,7 @@ use Throwable;
  *
  * @property Media[] files
  *
+ * @method getKey()
  * @method morphToMany(string $class, string $string, string $string1)
  */
 trait HasFile
@@ -30,7 +32,7 @@ trait HasFile
      * @return void
      * @throws Throwable
      */
-    public static function bootHasMedia(): void
+    public static function bootHasFile(): void
     {
         if (!in_array('JobMetric\Media\Contracts\MediaContract', class_implements(self::class))) {
             throw new ModelMediaContractNotFoundException(self::class);
@@ -46,7 +48,6 @@ trait HasFile
     {
         return [
             'base' => [
-                'media_type' => MediaTypeEnum::FILE(),
                 'media_collection' => 'public',
                 'size' => [
                     'default' => [
@@ -65,20 +66,21 @@ trait HasFile
      */
     public function files(): MorphToMany
     {
-        return $this->morphToMany(Media::class, 'relatable', 'media_relations');
+        return $this->morphToMany(Media::class, 'mediaable', config('media.tables.media_relations'))
+            ->withPivot('collection')
+            ->withTimestamps();
     }
 
     /**
-     * Store media
+     * attach media
      *
      * @param int $media_id
      * @param string $collection
-     * @param string $media_type
      *
-     * @return bool
+     * @return array
      * @throws Throwable
      */
-    public function storeMedia(int $media_id, string $collection = 'base', string $media_type = 'f'): bool
+    public function attachMedia(int $media_id, string $collection = 'base'): array
     {
         $collections = $this->mediaAllowCollections();
 
@@ -91,40 +93,52 @@ trait HasFile
             throw new MediaNotFoundException($media_id);
         }
 
-        if (array_key_exists($collection, $collections)) {
-            if ($media->type != $media_type || $media->type != $collections[$collection]['media_type'] ?? MediaTypeEnum::FILE()) {
-                throw new MediaTypeNotMatchException($media_id, $media_type);
-            }
-
-            if ($media->collection != $collections[$collection]['media_collection'] ?? 'public') {
-                throw new MediaCollectionNotMatchException($media_id, $media->collection, $collections[$collection]);
-            }
-        } else {
+        if (!array_key_exists($collection, $collections)) {
             throw new CollectionNotInMediaAllowCollectionMethodException($collection);
+        }
+
+        if ($media->type != MediaTypeEnum::FILE()) {
+            throw new MediaTypeNotMatchException($media_id, $media->type);
+        }
+
+        if ($media->collection != $collections[$collection]['media_collection'] ?? 'public') {
+            throw new MediaCollectionNotMatchException($media_id, $media->collection, $collection);
         }
 
         $this->files()->attach($media_id, [
             'collection' => $collection
         ]);
 
-        return true;
+        return [
+            'ok' => true,
+            'message' => trans('media::base.messages.attached'),
+            'data' => MediaResource::make($media),
+            'status' => 200
+        ];
     }
 
     /**
-     * Forget media
+     * detach media
      *
      * @param int $media_id
      *
-     * @return bool
+     * @return array
      * @throws Throwable
      */
-    public function forgetMedia(int $media_id): bool
+    public function detachMedia(int $media_id): array
     {
         foreach ($this->files as $file) {
             if ($file->id == $media_id) {
+                $data = MediaResource::make($file);
+
                 $this->files()->detach($media_id);
 
-                return true;
+                return [
+                    'ok' => true,
+                    'message' => trans('media::base.messages.detached'),
+                    'data' => $data,
+                    'status' => 200
+                ];
             }
         }
 

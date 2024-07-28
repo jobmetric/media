@@ -17,6 +17,8 @@ return [
     ],
 
     'messages' => [
+        'attached' => 'Media attached successfully!',
+        'detached' => 'Media detached successfully!',
     ],
 
     'exceptions' => [

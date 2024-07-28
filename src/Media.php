@@ -5,15 +5,20 @@ namespace JobMetric\Media;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use JobMetric\Media\Enums\MediaTypeEnum;
+use JobMetric\Media\Events\NewFolderEvent;
 use JobMetric\Media\Events\UploadFileEvent;
 use JobMetric\Media\Exceptions\DiskNotDefinedException;
 use JobMetric\Media\Exceptions\DuplicateFileException;
 use JobMetric\Media\Exceptions\FileNotSendInRequestException;
 use JobMetric\Media\Exceptions\FolderNotFoundException;
+use JobMetric\Media\Exceptions\MediaFolderNameInvalidException;
+use JobMetric\Media\Exceptions\MediaNotFoundException;
+use JobMetric\Media\Exceptions\MediaTypeNotMatchException;
 use JobMetric\Media\Http\Resources\MediaResource;
 use JobMetric\Media\Models\Media as MediaModel;
 use JobMetric\Media\Models\MediaPath;
 use Spatie\QueryBuilder\QueryBuilder;
+use Throwable;
 
 class Media
 {
@@ -116,12 +121,73 @@ class Media
      * New Folder
      *
      * @param string $name
-     * @param int $parent_id
+     * @param int|null $parent_id
      *
      * @return array
+     * @throws Throwable
      */
-    public function newFolder(string $name, int $parent_id = 0): array
+    public function newFolder(string $name, int $parent_id = null): array
     {
+        if (!$this->isValidFolderName($name)) {
+            throw new MediaFolderNameInvalidException($name);
+        }
+
+        if ($parent_id) {
+            /**
+             * @var MediaModel $parent
+             */
+            $parent = MediaModel::query()->find($parent_id);
+
+            if (!$parent) {
+                throw new MediaNotFoundException($parent_id);
+            }
+
+            if ($parent->type != MediaTypeEnum::FOLDER()) {
+                throw new MediaTypeNotMatchException($parent_id, MediaTypeEnum::FOLDER());
+            }
+
+            unset($parent);
+        }
+
+        /**
+         * @var MediaModel $media
+         */
+        $media = MediaModel::query()->create([
+            'name' => $name,
+            'parent_id' => $parent_id,
+            'type' => MediaTypeEnum::FOLDER(),
+        ]);
+
+        $level = 0;
+
+        $paths = MediaPath::query()->select('path_id')->where([
+            'media_id' => $parent_id
+        ])->orderBy('level')->get()->toArray();
+
+        $paths[] = [
+            'path_id' => $media->id
+        ];
+
+        foreach ($paths as $path) {
+            $mediaPath = new MediaPath;
+            $mediaPath->media_id = $media->id;
+            $mediaPath->path_id = $path['path_id'];
+            $mediaPath->level = $level++;
+            $mediaPath->save();
+
+            unset($mediaPath);
+        }
+
+        event(new NewFolderEvent($media));
+
+        return [
+            'ok' => true,
+            'message' => trans('media::base.messages.created', [
+                'type' => 'folder',
+            ]),
+            'data' => MediaResource::make($media),
+            'status' => 201
+        ];
     }
 
     /**
@@ -159,15 +225,15 @@ class Media
      */
     public function upload(int $folder = null, string $collection = 'public', string $field = 'file', string $disk = 'default'): array
     {
-        if(!request()->exists($field)) {
+        if (!request()->exists($field)) {
             throw new FileNotSendInRequestException($field);
         }
 
         $file = request()->file($field);
 
         $content_id = sha1($file->getContent());
-        if(!config('jmedia.collections.'.$collection.'.duplicate_content')) {
-            if(\JobMetric\Media\Models\Media::query()->where([
+        if (!config('jmedia.collections.' . $collection . '.duplicate_content')) {
+            if (\JobMetric\Media\Models\Media::query()->where([
                 'collection' => $collection,
                 'content_id' => $content_id
             ])->exists()) {
@@ -175,15 +241,15 @@ class Media
             }
         }
 
-        if(!JMedia::category()->exist($folder, $collection)) {
+        if (!JMedia::category()->exist($folder, $collection)) {
             throw new FolderNotFoundException;
         }
 
-        if($disk == 'default') {
-            $disk = config('jmedia.collections.'.$collection.'.disk');
+        if ($disk == 'default') {
+            $disk = config('jmedia.collections.' . $collection . '.disk');
         }
 
-        if(!array_key_exists($disk, config('filesystems.disks'))) {
+        if (!array_key_exists($disk, config('filesystems.disks'))) {
             throw new DiskNotDefinedException($disk);
         }
 
@@ -191,11 +257,11 @@ class Media
         $mime_type = $file->getMimeType();
         $size = $file->getSize();
         $extension = $file->extension();
-        $filename = uuid_create().'.'.$extension;
+        $filename = uuid_create() . '.' . $extension;
 
         try {
             $file->storeAs($collection, $filename, $disk);
-        } catch(Exception $exception) {
+        } catch (Exception $exception) {
             throw new Exception($exception->getMessage(), $exception->getCode());
         }
 
@@ -205,13 +271,13 @@ class Media
          * @var Media $object
          */
         $object = Media::query()->create([
-            'name'       => $original_name,
-            'disk'       => $disk,
-            'filename'   => $filename,
-            'parent_id'  => $folder,
-            'type'       => MediaTypeEnum::FILE->value,
-            'mime_type'  => $mime_type,
-            'size'       => $size,
+            'name' => $original_name,
+            'disk' => $disk,
+            'filename' => $filename,
+            'parent_id' => $folder,
+            'type' => MediaTypeEnum::FILE->value,
+            'mime_type' => $mime_type,
+            'size' => $size,
             'content_id' => $content_id,
             'additional' => $additional,
             'collection' => $collection,
@@ -221,7 +287,7 @@ class Media
         $level = 0;
 
         $paths = MediaPath::query()->where('media_id', $folder)->orderBy('level')->get();
-        foreach($paths as $path) {
+        foreach ($paths as $path) {
             MediaPath::query()->create([
                 'media_id' => $folder,
                 'path_id' => $path->path_id,
@@ -392,5 +458,19 @@ class Media
      */
     public function forceDelete(int $media_id): array
     {
+    }
+
+    /**
+     * check folder name is valid
+     *
+     * @param string $folderName
+     *
+     * @return false|int
+     */
+    private function isValidFolderName(string $folderName): bool|int
+    {
+        $pattern = '/^(?!-)[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$/';
+
+        return preg_match($pattern, $folderName);
     }
 }

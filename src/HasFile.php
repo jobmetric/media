@@ -98,7 +98,7 @@ trait HasFile
         }
 
         if ($media->type != MediaTypeEnum::FILE()) {
-            throw new MediaTypeNotMatchException($media_id, $media->type);
+            throw new MediaTypeNotMatchException($media_id, MediaTypeEnum::FILE());
         }
 
         if ($media->collection != $collections[$collection]['media_collection'] ?? 'public') {

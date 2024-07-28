@@ -5,9 +5,10 @@ namespace JobMetric\Media\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static \JobMetric\Media\Services\Common common()
- * @method static \JobMetric\Media\Services\Category category()
- * @method static \JobMetric\Media\Services\File file()
+ * @method static \Spatie\QueryBuilder\QueryBuilder query(array $filter = [], array $with = [])
+ * @method static \Illuminate\Http\Resources\Json\AnonymousResourceCollection paginate(array $filter = [], int $page_limit = 15, array $with = [])
+ * @method static \Illuminate\Http\Resources\Json\AnonymousResourceCollection all(array $filter = [], array $with = [])
+ * @method static array newFolder(string $name, int $parent_id = 0)
  *
  * @see \JobMetric\Media\Media
  */

@@ -17,6 +17,7 @@ return [
     ],
 
     'messages' => [
+        'created' => 'Media ":type" created successfully!',
         'attached' => 'Media attached successfully!',
         'detached' => 'Media detached successfully!',
     ],
@@ -28,6 +29,7 @@ return [
         'media_collection_not_match' => 'Media with id ":media_id" has the ":media_collection" collection, but you send the ":collection" collection',
         'collection_not_in_media_allow_collection_method' => 'The ":collection" collection is not in the "media_allow_collections" function!',
         'media_relation_not_found' => 'Media relation not found for ":mediaable_type" with id ":mediaable_id" and media id ":media_id"!',
+        'media_folder_name_invalid' => 'The folder name ":name" is invalid!',
     ],
 
 ];

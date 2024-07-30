@@ -20,6 +20,7 @@ return [
         'created' => 'Media ":type" created successfully!',
         'attached' => 'Media attached successfully!',
         'detached' => 'Media detached successfully!',
+        'rename' => 'Media renamed successfully!',
     ],
 
     'exceptions' => [

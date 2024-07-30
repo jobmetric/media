@@ -96,4 +96,52 @@ class MediaTest extends BaseTestCase
             'level' => 1
         ]);
     }
+
+    /**
+     * @throws Throwable
+     */
+    public function test_rename()
+    {
+        // create a new folder
+        $media_1 = Media::newFolder('a');
+        $media_2 = Media::newFolder('b');
+
+        // test invalid char for name folder
+        try {
+            $media_rename = Media::rename($media_1['data']->id, '_test_');
+
+            $this->assertIsArray($media_rename);
+        } catch (Throwable $e) {
+            $this->assertInstanceOf(MediaFolderNameInvalidException::class, $e);
+        }
+
+        // test invalid media
+        try {
+            $media_rename = Media::rename(999, 'test');
+
+            $this->assertIsArray($media_rename);
+        } catch (Throwable $e) {
+            $this->assertInstanceOf(MediaNotFoundException::class, $e);
+        }
+
+        // check exist folder name
+        try {
+            $media_rename = Media::rename($media_1['data']->id, 'b');
+
+            $this->assertIsArray($media_rename);
+        } catch (Throwable $e) {
+            $this->assertInstanceOf(MediaSameNameException::class, $e);
+        }
+
+        // rename folder
+        $media_rename = Media::rename($media_1['data']->id, 'c');
+
+        $this->assertIsArray($media_rename);
+        $this->assertTrue($media_rename['ok']);
+        $this->assertEquals($media_rename['message'], trans('media::base.messages.rename', [
+            'type' => 'folder',
+        ]));
+        $this->assertInstanceOf(MediaResource::class, $media_rename['data']);
+        $this->assertEquals(200, $media_rename['status']);
+    }
 }

@@ -208,9 +208,45 @@ class Media
      * @param string $name
      *
      * @return array
+     * @throws Throwable
      */
     public function rename(int $media_id, string $name): array
     {
+        if (!$this->isValidFolderName($name)) {
+            throw new MediaFolderNameInvalidException($name);
+        }
+
+        /**
+         * @var MediaModel $media
+         */
+        $media = MediaModel::query()->find($media_id);
+
+        if (!$media) {
+            throw new MediaNotFoundException($media_id);
+        }
+
+        // check exist name in parent folder
+        $exist = MediaModel::query()->where([
+            'name' => $name,
+            'parent_id' => $media->parent_id
+        ])->where('id', '!=', $media_id)->exists();
+
+        if ($exist) {
+            throw new MediaSameNameException($name);
+        }
+
+        $media->name = $name;
+
+        $media->save();
+
+        return [
+            'ok' => true,
+            'message' => trans('media::base.messages.rename', [
+                'type' => 'folder',
+            ]),
+            'data' => MediaResource::make($media),
+            'status' => 200
+        ];
     }
 
     /**

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Illuminate\Http\Resources\Json\AnonymousResourceCollection paginate(array $filter = [], int $page_limit = 15, array $with = [])
  * @method static \Illuminate\Http\Resources\Json\AnonymousResourceCollection all(array $filter = [], array $with = [])
  * @method static array newFolder(string $name, int $parent_id = 0)
+ * @method static array rename(int $media_id, string $name)
  *
  * @see \JobMetric\Media\Media
  */

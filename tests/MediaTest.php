@@ -4,6 +4,7 @@ namespace JobMetric\Media\Tests;
 
 use JobMetric\Media\Exceptions\MediaFolderNameInvalidException;
 use JobMetric\Media\Exceptions\MediaNotFoundException;
+use JobMetric\Media\Exceptions\MediaSameNameException;
 use JobMetric\Media\Facades\Media;
 use JobMetric\Media\Http\Resources\MediaResource;
 use Tests\BaseDatabaseTestCase as BaseTestCase;
@@ -56,6 +57,15 @@ class MediaTest extends BaseTestCase
             'path_id' => $media['data']->id,
             'level' => 0
         ]);
+
+        // check the duplicate folder
+        try {
+            $media = Media::newFolder('a');
+
+            $this->assertIsArray($media);
+        } catch (Throwable $e) {
+            $this->assertInstanceOf(MediaSameNameException::class, $e);
+        }
 
         // create a new folder with parent folder
         $mediaChild = Media::newFolder('b', $media['data']->id);

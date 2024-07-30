@@ -13,6 +13,7 @@ use JobMetric\Media\Exceptions\FileNotSendInRequestException;
 use JobMetric\Media\Exceptions\FolderNotFoundException;
 use JobMetric\Media\Exceptions\MediaFolderNameInvalidException;
 use JobMetric\Media\Exceptions\MediaNotFoundException;
+use JobMetric\Media\Exceptions\MediaSameNameException;
 use JobMetric\Media\Exceptions\MediaTypeNotMatchException;
 use JobMetric\Media\Http\Resources\MediaResource;
 use JobMetric\Media\Models\Media as MediaModel;
@@ -147,6 +148,16 @@ class Media
             }
 
             unset($parent);
+        }
+
+        // check exist name in parent folder
+        $exist = MediaModel::query()->where([
+            'name' => $name,
+            'parent_id' => $parent_id
+        ])->exists();
+
+        if ($exist) {
+            throw new MediaSameNameException($name);
         }
 
         /**

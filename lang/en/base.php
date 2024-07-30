@@ -30,6 +30,7 @@ return [
         'collection_not_in_media_allow_collection_method' => 'The ":collection" collection is not in the "media_allow_collections" function!',
         'media_relation_not_found' => 'Media relation not found for ":mediaable_type" with id ":mediaable_id" and media id ":media_id"!',
         'media_folder_name_invalid' => 'The folder name ":name" is invalid!',
+        'media_same_name' => 'There is a media named ":name" in the branch you are in and you cannot use this name!',
     ],
 
 ];

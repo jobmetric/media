@@ -16,6 +16,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property mixed additional
  * @property mixed disk
  * @property mixed collection
+ * @property mixed uuid
  * @property mixed filename
  * @property mixed deleted_at
  * @property mixed created_at
@@ -41,6 +42,7 @@ class MediaResource extends JsonResource
             'additional' => $this->additional,
             'disk' => $this->disk,
             'collection' => $this->collection,
+            'uuid' => $this->uuid,
             'filename' => $this->filename,
             'deleted_at' => $this->deleted_at,
             'created_at' => $this->created_at,

@@ -67,6 +67,11 @@ return new class extends Migration {
              * if the type=c -> collection=null else collection=any collection
              */
 
+            $table->uuid()->nullable()->unique()->index();
+            /**
+             * uuid for all media
+             */
+
             $table->string('filename')->nullable()->unique();
             /**
              * filename = uuid + . + extension

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use JobMetric\Media\Enums\MediaTypeEnum;
 use JobMetric\PackageCore\Models\HasUuid;
 
 /**
@@ -49,7 +50,8 @@ class Media extends Model
         'additional',
         'disk',
         'collection',
-        'filename'
+        'uuid',
+        'extension'
     ];
 
     protected $casts = [
@@ -62,7 +64,8 @@ class Media extends Model
         'additional' => 'array',
         'disk' => 'string',
         'collection' => 'string',
-        'filename' => 'string'
+        'uuid' => 'string',
+        'extension' => 'string'
     ];
 
     public function getTable()
@@ -101,5 +104,19 @@ class Media extends Model
     public function scopeOfCollection(Builder $query, string $collection): Builder
     {
         return $query->where('collection', $collection);
+    }
+
+    /**
+     * Get the filename attribute.
+     *
+     * @return string|null
+     */
+    public function getFilenameAttribute(): ?string
+    {
+        if($this->type === MediaTypeEnum::FOLDER()) {
+            return null;
+        }
+
+        return $this->uuid . '.' . $this->extension;
     }
 }

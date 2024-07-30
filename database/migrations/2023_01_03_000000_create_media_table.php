@@ -72,11 +72,11 @@ return new class extends Migration {
              * uuid for all media
              */
 
-            $table->string('filename')->nullable()->unique();
+            $table->string('extension')->nullable()->index();
             /**
-             * filename = uuid + . + extension
+             * value: jpg, pdf, ...
              *
-             * if the type=c -> filename=null else filename=uuid.extension
+             * if the type=c -> extension=null else extension=any extension
              */
 
             $table->softDeletes();

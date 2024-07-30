@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Illuminate\Http\Resources\Json\AnonymousResourceCollection all(array $filter = [], array $with = [])
  * @method static array newFolder(string $name, int $parent_id = 0)
  * @method static array rename(int $media_id, string $name)
+ * @method static bool hasFolder(int $media_id)
  *
  * @see \JobMetric\Media\Media
  */

@@ -104,7 +104,7 @@ class MediaTest extends BaseTestCase
     {
         // create a new folder
         $media_1 = Media::newFolder('a');
-        $media_2 = Media::newFolder('b');
+        Media::newFolder('b');
 
         // test invalid char for name folder
         try {
@@ -143,5 +143,28 @@ class MediaTest extends BaseTestCase
         ]));
         $this->assertInstanceOf(MediaResource::class, $media_rename['data']);
         $this->assertEquals(200, $media_rename['status']);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function test_has_folder()
+    {
+        // create a new folder
+        $media = Media::newFolder('a');
+
+        // test invalid media
+        try {
+            $media_has_folder = Media::hasFolder(999);
+
+            $this->assertIsBool($media_has_folder);
+        } catch (Throwable $e) {
+            $this->assertInstanceOf(MediaNotFoundException::class, $e);
+        }
+
+        // check folder
+        $media_has_folder = Media::hasFolder($media['data']->id);
+
+        $this->assertTrue($media_has_folder);
     }
 }

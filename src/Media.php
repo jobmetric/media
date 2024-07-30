@@ -255,9 +255,24 @@ class Media
      * @param int $media_id
      *
      * @return bool
+     * @throws Throwable
      */
     public function hasFolder(int $media_id): bool
     {
+        /**
+         * @var MediaModel $media
+         */
+        $media = MediaModel::query()->find($media_id);
+
+        if (!$media) {
+            throw new MediaNotFoundException($media_id);
+        }
+
+        if($media->type == MediaTypeEnum::FOLDER()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

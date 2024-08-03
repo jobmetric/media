@@ -284,6 +284,27 @@ class MediaTest extends BaseTestCase
      */
     public function test_details()
     {
+        $image = $this->create_image();
+
+        // send file in request
+        $response = $this->post(route('media.upload'), [
+            'file' => $image
+        ]);
+
+        $dataResponse = $response->json();
+
+        // get details
+        $responseDetails = $this->get(route('media.details', $dataResponse['data']['id']));
+
+        $responseDetails->assertStatus(200);
+
+        $dataDetails = $responseDetails->json();
+
+        $this->assertTrue($dataDetails['ok']);
+        $this->assertEquals($dataDetails['message'], trans('media::base.messages.details', [
+            'type' => trans('media::base.media_type.file'),
+        ]));
+        $this->assertEquals(200, $dataDetails['status']);
     }
 
     /**

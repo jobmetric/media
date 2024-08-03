@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
@@ -23,7 +24,7 @@ return new class extends Migration {
 
             $table->string('collection')->index();
 
-            $table->dateTime('created_at')->index();
+            $table->dateTime('created_at')->index()->default(DB::raw('CURRENT_TIMESTAMP'));
 
             $table->unique([
                 'media_id',

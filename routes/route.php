@@ -19,5 +19,6 @@ Route::prefix('media')->name('media.')->namespace('JobMetric\Media\Http\Controll
         SubstituteBindings::class
     ])->group(function () {
         Route::post('upload', [MediaController::class, 'upload'])->name('upload');
+        Route::get('download/{media}', [MediaController::class, 'download'])->name('download');
     });
 });

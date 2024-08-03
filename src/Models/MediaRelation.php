@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use JobMetric\Media\Events\MediaableResourceEvent;
 
 /**
  * JobMetric\Media\Models\MediaRelation
@@ -15,9 +16,11 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property mixed mediaable_type
  * @property mixed mediaable_id
  * @property mixed collection
+ * @property mixed created_at
  *
  * @property Media media
  * @property mixed mediaable
+ * @property mixed mediaable_resource
  *
  * @method static Builder ofCollection(string $collection)
  */
@@ -25,7 +28,7 @@ class MediaRelation extends Pivot
 {
     use HasFactory;
 
-    public $timestamps = false;
+    const UPDATED_AT = null;
 
     protected $fillable = [
         'media_id',
@@ -72,5 +75,18 @@ class MediaRelation extends Pivot
     public function scopeOfCollection(Builder $query, string $collection): Builder
     {
         return $query->where('collection', $collection);
+    }
+
+    /**
+     * Get the mediaable resource attribute.
+     *
+     * @return mixed|null
+     */
+    public function getMediaableResourceAttribute(): mixed
+    {
+        $event = new MediaableResourceEvent($this->mediaable);
+        event($event);
+
+        return $event->resource;
     }
 }

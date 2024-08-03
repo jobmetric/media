@@ -8,6 +8,7 @@ use JobMetric\Media\Exceptions\MediaNameInvalidException;
 use JobMetric\Media\Exceptions\MediaNotFoundException;
 use JobMetric\Media\Exceptions\MediaSameNameException;
 use JobMetric\Media\Facades\Media;
+use JobMetric\Media\Http\Resources\MediaRelationResource;
 use JobMetric\Media\Http\Resources\MediaResource;
 use Tests\BaseDatabaseTestCase as BaseTestCase;
 use Throwable;
@@ -305,6 +306,9 @@ class MediaTest extends BaseTestCase
             'type' => trans('media::base.media_type.file'),
         ]));
         $this->assertEquals(200, $dataDetails['status']);
+
+        // remove test file
+        Storage::disk($dataResponse['data']['disk'])->delete($dataResponse['data']['collection'] . '/' . $dataResponse['data']['filename']);
     }
 
     /**
@@ -312,6 +316,31 @@ class MediaTest extends BaseTestCase
      */
     public function test_used_in()
     {
+        $image = $this->create_image();
+
+        // send file in request
+        $response = $this->post(route('media.upload'), [
+            'file' => $image
+        ]);
+
+        $dataResponse = $response->json();
+
+        // store product
+        $product = $this->create_product();
+
+        $product->attachMedia($dataResponse['data']['id']);
+
+        // get used in
+        $dataUsedIns = Media::usedIn($dataResponse['data']['id']);
+
+        $this->assertCount(1, $dataUsedIns);
+
+        $dataUsedIns->each(function ($dataUsedIn) {
+            $this->assertInstanceOf(MediaRelationResource::class, $dataUsedIn);
+        });
+
+        // remove test file
+        Storage::disk($dataResponse['data']['disk'])->delete($dataResponse['data']['collection'] . '/' . $dataResponse['data']['filename']);
     }
 
     /**

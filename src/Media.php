@@ -575,7 +575,7 @@ class Media
         return [
             'ok' => true,
             'message' => trans('media::base.messages.details', [
-                'type' => trans('media::base.media_type.' . $media->type),
+                'type' => trans('media::base.media_type.' . ($media->type == MediaTypeEnum::FOLDER() ? 'folder' : 'file')),
             ]),
             'data' => MediaResource::make($media),
             'status' => 200

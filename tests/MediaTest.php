@@ -3,6 +3,7 @@
 namespace JobMetric\Media\Tests;
 
 use Illuminate\Support\Facades\Storage;
+use JobMetric\Media\Enums\MediaTypeEnum;
 use JobMetric\Media\Exceptions\MediaNameInvalidException;
 use JobMetric\Media\Exceptions\MediaNotFoundException;
 use JobMetric\Media\Exceptions\MediaSameNameException;
@@ -217,6 +218,24 @@ class MediaTest extends BaseTestCase
 
         // check exist file in the path
         $this->assertTrue(Storage::disk($data['disk'])->exists($data['collection'] . '/' . $data['filename']));
+
+        $this->assertDatabaseHas(config('media.tables.media'), [
+            'name' => $data['name'],
+            'parent_id' => null,
+            'type' => MediaTypeEnum::FILE(),
+            'mime_type' => $data['mime_type'],
+            'size' => $data['size'],
+            'content_id' => $data['content_id'],
+            'disk' => $data['disk'],
+            'collection' => $data['collection'],
+            'extension' => $data['extension'],
+        ]);
+
+        $this->assertDatabaseHas(config('media.tables.media_path'), [
+            'media_id' => $data['id'],
+            'path_id' => $data['id'],
+            'level' => 0
+        ]);
 
         // remove test file
         Storage::disk($data['disk'])->delete($data['collection'] . '/' . $data['filename']);

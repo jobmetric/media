@@ -2,6 +2,7 @@
 
 namespace JobMetric\Media\Tests;
 
+use Illuminate\Support\Facades\Storage;
 use JobMetric\Media\Exceptions\MediaNameInvalidException;
 use JobMetric\Media\Exceptions\MediaNotFoundException;
 use JobMetric\Media\Exceptions\MediaSameNameException;
@@ -194,6 +195,31 @@ class MediaTest extends BaseTestCase
      */
     public function test_upload()
     {
+        $image = $this->create_image();
+
+        // send file in request
+        $response = $this->post(route('media.upload'), [
+            'file' => $image
+        ]);
+
+        $response->assertStatus(201);
+
+        $this->assertTrue($response->json('ok'));
+        $this->assertEquals($response->json('message'), trans('media::base.messages.created', [
+            'type' => trans('media::base.media_type.file')
+        ]));
+        $this->assertEquals(201, $response->json('status'));
+
+        $data = $response->json('data');
+
+        // check path file
+        Storage::disk($data['disk'])->assertExists($data['collection'] . '/' . $data['filename']);
+
+        // check exist file in the path
+        $this->assertTrue(Storage::disk($data['disk'])->exists($data['collection'] . '/' . $data['filename']));
+
+        // remove test file
+        Storage::disk($data['disk'])->delete($data['collection'] . '/' . $data['filename']);
     }
 
     /**

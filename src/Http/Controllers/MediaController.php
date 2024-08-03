@@ -18,8 +18,8 @@ class MediaController extends BaseMediaController
      */
     public function upload(UploadRequest $request): JsonResponse
     {
-        return response()->json(
-            Media::upload($request->parent_id, $request->collection)
-        );
+        $media = Media::upload($request->parent_id, $request->collection);
+
+        return response()->json($media, $media['status']);
     }
 }

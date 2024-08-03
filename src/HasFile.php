@@ -66,9 +66,9 @@ trait HasFile
      */
     public function files(): MorphToMany
     {
-        return $this->morphToMany(Media::class, 'mediaable', config('media.tables.media_relations'))
+        return $this->morphToMany(Media::class, 'mediaable', config('media.tables.media_relation'))
             ->withPivot('collection')
-            ->withTimestamps();
+            ->withTimestamps(['created_at']);
     }
 
     /**

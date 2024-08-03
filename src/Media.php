@@ -578,6 +578,7 @@ class Media
                 'type' => trans('media::base.media_type.' . ($media->type == MediaTypeEnum::FOLDER() ? 'folder' : 'file')),
             ]),
             'data' => MediaResource::make($media),
+            'used_in' => $this->usedIn($media_id),
             'status' => 200
         ];
     }
@@ -587,10 +588,10 @@ class Media
      *
      * @param int $media_id
      *
-     * @return array
+     * @return AnonymousResourceCollection
      * @throws Throwable
      */
-    public function usedIn(int $media_id): array
+    public function usedIn(int $media_id): AnonymousResourceCollection
     {
         /**
          * @var MediaModel $media
@@ -609,14 +610,7 @@ class Media
             'media_id' => $media_id
         ])->get();
 
-        return [
-            'ok' => true,
-            'message' => trans('media::base.messages.details', [
-                'type' => trans('media::base.media_type.file'),
-            ]),
-            'data' => MediaRelationResource::collection($media_relations),
-            'status' => 200
-        ];
+        return MediaRelationResource::collection($media_relations);
     }
 
     /**

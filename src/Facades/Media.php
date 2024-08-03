@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static string temporaryUrl(int $media_id, int $expire_time = 60)
  * @method static void stream(int $media_id)
  * @method static array details(int $media_id)
- * @method static array usedIn(int $media_id)
+ * @method static \Illuminate\Http\Resources\Json\AnonymousResourceCollection usedIn(int $media_id)
  * @method static bool hasUsed(int $media_id)
  * @method static void compress(array $media_ids)
  * @method static void extract(int $media_id)

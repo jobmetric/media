@@ -15,6 +15,16 @@ use Illuminate\Support\Facades\Facade;
  * @method static array upload(int $parent_id = null, string $collection = 'public', string $field = 'file')
  * @method static \Symfony\Component\HttpFoundation\StreamedResponse download(int $media_id)
  * @method static string temporaryUrl(int $media_id, int $expire_time = 60)
+ * @method static void stream(int $media_id)
+ * @method static array details(int $media_id)
+ * @method static array usedIn(int $media_id)
+ * @method static bool hasUsed(int $media_id)
+ * @method static void compress(array $media_ids)
+ * @method static void extract(int $media_id)
+ * @method static void move(int $media_id, int $parent_id = null)
+ * @method static void delete(int $media_id)
+ * @method static void restore(int $media_id)
+ * @method static void forceDelete(int $media_id)
  *
  * @see \JobMetric\Media\Media
  */

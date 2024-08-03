@@ -24,6 +24,20 @@ class MediaServiceProvider extends PackageCoreServiceProvider
             ->hasConfig()
             ->hasTranslation()
             ->hasMigration()
+            ->hasRoute()
             ->registerClass('Media', Media::class);
+    }
+
+    /**
+     * After Boot Package
+     *
+     * @return void
+     */
+    public function afterBootPackage(): void
+    {
+        // load media disk configuration
+        foreach (config('media.disks') as $disk => $config) {
+            config()->set("filesystems.disks.{$disk}", $config);
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace JobMetric\Media\Tests;
 
-use JobMetric\Media\Exceptions\MediaFolderNameInvalidException;
+use JobMetric\Media\Exceptions\MediaNameInvalidException;
 use JobMetric\Media\Exceptions\MediaNotFoundException;
 use JobMetric\Media\Exceptions\MediaSameNameException;
 use JobMetric\Media\Facades\Media;
@@ -15,6 +15,20 @@ class MediaTest extends BaseTestCase
     /**
      * @throws Throwable
      */
+    public function test_pagination()
+    {
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function test_all()
+    {
+    }
+
+    /**
+     * @throws Throwable
+     */
     public function test_new_folder()
     {
         // test invalid char for name folder
@@ -23,7 +37,7 @@ class MediaTest extends BaseTestCase
 
             $this->assertIsArray($media);
         } catch (Throwable $e) {
-            $this->assertInstanceOf(MediaFolderNameInvalidException::class, $e);
+            $this->assertInstanceOf(MediaNameInvalidException::class, $e);
         }
 
         // test invalid parent folder
@@ -112,7 +126,7 @@ class MediaTest extends BaseTestCase
 
             $this->assertIsArray($media_rename);
         } catch (Throwable $e) {
-            $this->assertInstanceOf(MediaFolderNameInvalidException::class, $e);
+            $this->assertInstanceOf(MediaNameInvalidException::class, $e);
         }
 
         // test invalid media
@@ -166,5 +180,103 @@ class MediaTest extends BaseTestCase
         $media_has_folder = Media::hasFolder($media['data']->id);
 
         $this->assertTrue($media_has_folder);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function test_has_file()
+    {
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function test_upload()
+    {
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function test_download()
+    {
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function test_temporary_url()
+    {
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function test_stream()
+    {
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function test_details()
+    {
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function test_used_in()
+    {
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function test_has_used()
+    {
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function test_compress()
+    {
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function test_extract()
+    {
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function test_move()
+    {
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function test_delete()
+    {
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function test_restore()
+    {
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function test_force_delete()
+    {
     }
 }

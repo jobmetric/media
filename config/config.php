@@ -109,16 +109,59 @@ return [
 
     'collections' => [
         'public' => [
-            'disk' => env("MEDIA_COLLECTION_PUBLIC_DISK", env('FILESYSTEM_DISK', 'local')),
+            'disk' => env("MEDIA_COLLECTION_PUBLIC_DISK", 'media_public'),
             "duplicate_content" => env("MEDIA_COLLECTION_PUBLIC_DUPLICATE_CONTENT", false),
+            "max_size" => env("MEDIA_COLLECTION_PUBLIC_MAX_SIZE", -1), // -1: unlimited
+            "mime_type" => env("MEDIA_COLLECTION_PUBLIC_MIME_TYPE", 'any'), // any: all mime type
         ],
         'private' => [
-            'disk' => env("MEDIA_COLLECTION_PRIVATE_DISK", env('FILESYSTEM_DISK', 'local')),
+            'disk' => env("MEDIA_COLLECTION_PRIVATE_DISK", 'media_private'),
             "duplicate_content" => env("MEDIA_COLLECTION_PRIVATE_DUPLICATE_CONTENT", false),
+            "max_size" => env("MEDIA_COLLECTION_PRIVATE_MAX_SIZE", -1), // -1: unlimited
+            "mime_type" => env("MEDIA_COLLECTION_PRIVATE_MIME_TYPE", 'any'), // any: all mime type
         ],
         'avatar' => [
-            'disk' => env("MEDIA_COLLECTION_AVATAR_DISK", env('FILESYSTEM_DISK', 'local')),
+            'disk' => env("MEDIA_COLLECTION_AVATAR_DISK", 'media_avatar'),
             "duplicate_content" => env("MEDIA_COLLECTION_AVATAR_DUPLICATE_CONTENT", true),
+            "max_size" => env("MEDIA_COLLECTION_AVATAR_MAX_SIZE", 1024 * 1024), // 1MB
+            "mime_type" => env("MEDIA_COLLECTION_AVATAR_MIME_TYPE", 'image'), // image: image mime type
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Filesystem Disks In Media
+    |--------------------------------------------------------------------------
+    |
+    | There can be three disks here, of course, according to the number
+    | of collection groups defined above, their number changes.
+    |
+    | - public: collection public disk
+    | - private: collection private disk
+    | - avatar: collection avatar disk
+    |
+    | - Supported Drivers: "local", "ftp", "sftp", "s3"
+    */
+
+    'disks' => [
+        'media_public' => [
+            'driver' => 'local',
+            'root' => public_path('media/uploads'),
+            'url' => env('APP_URL').'/media/uploads',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+        'media_private' => [
+            'driver' => 'local',
+            'root' => storage_path('app'),
+            'throw' => false,
+        ],
+        'media_avatar' => [
+            'driver' => 'local',
+            'root' => public_path('media/uploads/avatar'),
+            'url' => env('APP_URL').'/media/uploads/avatar',
+            'visibility' => 'public',
+            'throw' => false,
         ],
     ],
 

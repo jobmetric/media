@@ -24,6 +24,8 @@ use JobMetric\PackageCore\Models\HasUuid;
  * @property mixed additional
  * @property mixed disk
  * @property mixed collection
+ * @property mixed uuid
+ * @property mixed extension
  * @property mixed filename
  * @property mixed deleted_at
  * @property mixed created_at

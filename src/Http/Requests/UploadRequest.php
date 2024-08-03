@@ -35,9 +35,23 @@ class UploadRequest extends FormRequest
                 new MediaMostFolderRule
             ],
             'collection' => [
+                'sometimes',
+                'nullable',
                 'string',
                 new MediaCollectionExistRule
             ],
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'collection' => 'public',
+        ]);
     }
 }

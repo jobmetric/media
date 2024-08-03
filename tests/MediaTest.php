@@ -348,6 +348,33 @@ class MediaTest extends BaseTestCase
      */
     public function test_has_used()
     {
+        $image = $this->create_image();
+
+        // send file in request
+        $response = $this->post(route('media.upload'), [
+            'file' => $image
+        ]);
+
+        $dataResponse = $response->json();
+
+        // store product
+        $product = $this->create_product();
+
+        // check has used in
+        $dataHasUsed = Media::hasUsed($dataResponse['data']['id']);
+
+        $this->assertFalse($dataHasUsed);
+
+        // attach media
+        $product->attachMedia($dataResponse['data']['id']);
+
+        // check has used in
+        $dataHasUsed = Media::hasUsed($dataResponse['data']['id']);
+
+        $this->assertTrue($dataHasUsed);
+
+        // remove test file
+        Storage::disk($dataResponse['data']['disk'])->delete($dataResponse['data']['collection'] . '/' . $dataResponse['data']['filename']);
     }
 
     /**

@@ -23,6 +23,8 @@ return new class extends Migration {
 
             $table->string('collection')->index();
 
+            $table->dateTime('created_at')->index();
+
             $table->unique([
                 'media_id',
                 'mediaable_type',

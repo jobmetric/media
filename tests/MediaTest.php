@@ -246,6 +246,23 @@ class MediaTest extends BaseTestCase
      */
     public function test_download()
     {
+        $image = $this->create_image();
+
+        // upload file
+        $responseUpload = $this->post(route('media.upload'), [
+            'file' => $image
+        ]);
+
+        // download file
+        $responseDownload = $this->get(route('media.download', $responseUpload->json('data')['id']));
+
+        $responseDownload->assertStatus(200);
+
+        $this->assertEquals('image/jpeg', $responseDownload->headers->get('content-type'));
+
+        // remove test file
+        Storage::disk($responseUpload->json('data')['disk'])->delete($responseUpload->json('data')['collection'] . '/' . $responseUpload->json('data')['filename']);
+
     }
 
     /**

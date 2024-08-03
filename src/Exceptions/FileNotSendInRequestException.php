@@ -9,6 +9,8 @@ class FileNotSendInRequestException extends Exception
 {
     public function __construct(string $filed, int $code = 400, ?Throwable $previous = null)
     {
-        parent::__construct('Field '.$filed.' is not available in the sent request!', $code, $previous);
+        parent::__construct(trans('media::base.exceptions.file_not_send_in_request', [
+            'field' => $filed
+        ]), $code, $previous);
     }
 }

@@ -20,5 +20,6 @@ Route::prefix('media')->name('media.')->namespace('JobMetric\Media\Http\Controll
     ])->group(function () {
         Route::post('upload', [MediaController::class, 'upload'])->name('upload');
         Route::get('download/{media}', [MediaController::class, 'download'])->name('download');
+        Route::get('details/{media}', [MediaController::class, 'details'])->name('details');
     });
 });

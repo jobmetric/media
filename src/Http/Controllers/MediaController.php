@@ -36,4 +36,18 @@ class MediaController extends BaseMediaController
     {
         return Media::download($media->id);
     }
+
+    /**
+     * Get Details the media
+     *
+     * @param MediaModel $media
+     *
+     * @return JsonResponse
+     */
+    public function details(MediaModel $media): JsonResponse
+    {
+        $media = Media::details($media->id);
+
+        return response()->json($media, $media['status']);
+    }
 }

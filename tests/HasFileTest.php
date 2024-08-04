@@ -3,10 +3,9 @@
 namespace JobMetric\Media\Tests;
 
 use App\Models\Product;
-use Tests\BaseDatabaseTestCase as BaseTestCase;
 use Throwable;
 
-class HasFileTest extends BaseTestCase
+class HasFileTest extends BaseMedia
 {
     /**
      * @throws Throwable

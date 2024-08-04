@@ -10,10 +10,9 @@ use JobMetric\Media\Exceptions\MediaSameNameException;
 use JobMetric\Media\Facades\Media;
 use JobMetric\Media\Http\Resources\MediaRelationResource;
 use JobMetric\Media\Http\Resources\MediaResource;
-use Tests\BaseDatabaseTestCase as BaseTestCase;
 use Throwable;
 
-class MediaTest extends BaseTestCase
+class MediaTest extends BaseMedia
 {
     /**
      * @throws Throwable

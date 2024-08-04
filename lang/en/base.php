@@ -27,6 +27,7 @@ return [
         'detached' => 'Media detached successfully!',
         'rename' => 'Media ":type" renamed successfully!',
         'details' => 'Media ":type" details retrieved successfully!',
+        'zipped' => 'Media zipped successfully!',
     ],
 
     'exceptions' => [
@@ -43,6 +44,7 @@ return [
         'disk_not_defined_exception' => 'The ":disk" disk is not defined in the filesystem config!',
         'media_max_size' => 'The file size must be less than :size kilobytes!',
         'media_mime_type' => 'The file type ":mime_type" is not accepted, please use the allowed ones!',
+        'media_must_in_same_folder' => 'The selected media must be in the same folder!',
     ],
 
     'media_type' => [

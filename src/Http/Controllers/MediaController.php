@@ -5,12 +5,27 @@ namespace JobMetric\Media\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use JobMetric\Media\Facades\Media;
 use JobMetric\Media\Http\Controllers\Controller as BaseMediaController;
+use JobMetric\Media\Http\Requests\NewFolderRequest;
 use JobMetric\Media\Http\Requests\UploadRequest;
 use JobMetric\Media\Models\Media as MediaModel;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class MediaController extends BaseMediaController
 {
+    /**
+     * New Folder
+     *
+     * @param NewFolderRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function newFolder(NewFolderRequest $request): JsonResponse
+    {
+        $media = Media::newFolder($request->name, $request->parent_id);
+
+        return response()->json($media, $media['status']);
+    }
+
     /**
      * Upload a new media
      *

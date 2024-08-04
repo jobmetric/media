@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static array details(int $media_id)
  * @method static \Illuminate\Http\Resources\Json\AnonymousResourceCollection usedIn(int $media_id)
  * @method static bool hasUsed(int $media_id)
- * @method static void compress(array $media_ids)
+ * @method static array compress(array $media_ids, string $name)
  * @method static void extract(int $media_id)
  * @method static void move(int $media_id, int $parent_id = null)
  * @method static void delete(int $media_id)

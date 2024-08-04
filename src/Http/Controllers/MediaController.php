@@ -6,10 +6,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use JobMetric\Media\Facades\Media;
 use JobMetric\Media\Http\Controllers\Controller as BaseMediaController;
+use JobMetric\Media\Http\Requests\CompressRequest;
 use JobMetric\Media\Http\Requests\NewFolderRequest;
 use JobMetric\Media\Http\Requests\RenameRequest;
 use JobMetric\Media\Http\Requests\UploadRequest;
-use JobMetric\Media\Http\Resources\MediaResource;
 use JobMetric\Media\Models\Media as MediaModel;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -101,6 +101,20 @@ class MediaController extends BaseMediaController
     public function rename(MediaModel $media, RenameRequest $request): JsonResponse
     {
         $media = Media::rename($media->id, $request->name);
+
+        return response()->json($media, $media['status']);
+    }
+
+    /**
+     * Compress media
+     *
+     * @param CompressRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function compress(CompressRequest $request): JsonResponse
+    {
+        $media = Media::compress($request->media_ids, $request->name);
 
         return response()->json($media, $media['status']);
     }

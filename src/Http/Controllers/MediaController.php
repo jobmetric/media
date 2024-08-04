@@ -3,15 +3,38 @@
 namespace JobMetric\Media\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use JobMetric\Media\Facades\Media;
 use JobMetric\Media\Http\Controllers\Controller as BaseMediaController;
 use JobMetric\Media\Http\Requests\NewFolderRequest;
 use JobMetric\Media\Http\Requests\UploadRequest;
+use JobMetric\Media\Http\Resources\MediaResource;
 use JobMetric\Media\Models\Media as MediaModel;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class MediaController extends BaseMediaController
 {
+    /**
+     * index media
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function index(Request $request): JsonResponse
+    {
+        $page_limit = $request->input('page_limit', 50);
+        $mode = $request->input('mode');
+
+        if ($page_limit == -1) {
+            $media = Media::all(mode: $mode);
+        } else {
+            $media = Media::paginate(page_limit: $page_limit, mode: $mode);
+        }
+
+        return $this->response($media);
+    }
+
     /**
      * New Folder
      *

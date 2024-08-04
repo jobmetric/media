@@ -58,7 +58,7 @@ class MediaTest extends BaseTestCase
         $this->assertIsArray($media);
         $this->assertTrue($media['ok']);
         $this->assertEquals($media['message'], trans('media::base.messages.created', [
-            'type' => 'folder'
+            'type' => trans('media::base.media_type.folder')
         ]));
         $this->assertInstanceOf(MediaResource::class, $media['data']);
         $this->assertEquals(201, $media['status']);
@@ -90,7 +90,7 @@ class MediaTest extends BaseTestCase
         $this->assertIsArray($mediaChild);
         $this->assertTrue($mediaChild['ok']);
         $this->assertEquals($mediaChild['message'], trans('media::base.messages.created', [
-            'type' => 'folder'
+            'type' => trans('media::base.media_type.folder')
         ]));
         $this->assertInstanceOf(MediaResource::class, $mediaChild['data']);
         $this->assertEquals(201, $mediaChild['status']);
@@ -156,7 +156,7 @@ class MediaTest extends BaseTestCase
         $this->assertIsArray($media_rename);
         $this->assertTrue($media_rename['ok']);
         $this->assertEquals($media_rename['message'], trans('media::base.messages.rename', [
-            'type' => 'folder',
+            'type' => trans('media::base.media_type.folder'),
         ]));
         $this->assertInstanceOf(MediaResource::class, $media_rename['data']);
         $this->assertEquals(200, $media_rename['status']);

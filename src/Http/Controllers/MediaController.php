@@ -33,7 +33,7 @@ class MediaController extends BaseMediaController
             $media = Media::paginate(page_limit: $page_limit, mode: $mode);
         }
 
-        return $this->response($media);
+        return $this->responseCollection($media);
     }
 
     /**
@@ -45,9 +45,9 @@ class MediaController extends BaseMediaController
      */
     public function newFolder(NewFolderRequest $request): JsonResponse
     {
-        $media = Media::newFolder($request->name, $request->parent_id);
-
-        return response()->json($media, $media['status']);
+        return $this->response(
+            Media::newFolder($request->name, $request->parent_id)
+        );
     }
 
     /**
@@ -59,9 +59,9 @@ class MediaController extends BaseMediaController
      */
     public function upload(UploadRequest $request): JsonResponse
     {
-        $media = Media::upload($request->parent_id, $request->collection);
-
-        return response()->json($media, $media['status']);
+        return $this->response(
+            Media::upload($request->parent_id, $request->collection)
+        );
     }
 
     /**
@@ -85,9 +85,9 @@ class MediaController extends BaseMediaController
      */
     public function details(MediaModel $media): JsonResponse
     {
-        $media = Media::details($media->id);
-
-        return response()->json($media, $media['status']);
+        return $this->response(
+            Media::details($media->id)
+        );
     }
 
     /**
@@ -100,9 +100,9 @@ class MediaController extends BaseMediaController
      */
     public function rename(MediaModel $media, RenameRequest $request): JsonResponse
     {
-        $media = Media::rename($media->id, $request->name);
-
-        return response()->json($media, $media['status']);
+        return $this->response(
+            Media::rename($media->id, $request->name)
+        );
     }
 
     /**
@@ -114,8 +114,8 @@ class MediaController extends BaseMediaController
      */
     public function compress(CompressRequest $request): JsonResponse
     {
-        $media = Media::compress($request->media_ids, $request->name);
-
-        return response()->json($media, $media['status']);
+        return $this->response(
+            Media::compress($request->media_ids, $request->name)
+        );
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use JobMetric\Media\Facades\Media;
 use JobMetric\Media\Http\Controllers\Controller as BaseMediaController;
 use JobMetric\Media\Http\Requests\NewFolderRequest;
+use JobMetric\Media\Http\Requests\RenameRequest;
 use JobMetric\Media\Http\Requests\UploadRequest;
 use JobMetric\Media\Http\Resources\MediaResource;
 use JobMetric\Media\Models\Media as MediaModel;
@@ -85,6 +86,21 @@ class MediaController extends BaseMediaController
     public function details(MediaModel $media): JsonResponse
     {
         $media = Media::details($media->id);
+
+        return response()->json($media, $media['status']);
+    }
+
+    /**
+     * Rename the media
+     *
+     * @param MediaModel $media
+     * @param RenameRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function rename(MediaModel $media, RenameRequest $request): JsonResponse
+    {
+        $media = Media::rename($media->id, $request->name);
 
         return response()->json($media, $media['status']);
     }

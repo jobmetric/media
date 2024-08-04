@@ -23,5 +23,6 @@ Route::prefix('media')->name('media.')->namespace('JobMetric\Media\Http\Controll
         Route::post('upload', [MediaController::class, 'upload'])->name('upload');
         Route::get('download/{media}', [MediaController::class, 'download'])->name('download');
         Route::get('details/{media}', [MediaController::class, 'details'])->name('details');
+        Route::post('rename/{media}', [MediaController::class, 'rename'])->name('rename');
     });
 });

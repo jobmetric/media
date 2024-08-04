@@ -87,8 +87,7 @@ return [
             'application/vnd.openxmlformats-officedocument.presentationml.presentation'
         ],
         'archive' => [
-            'application/zip',
-            'application/vnd.rar'
+            'application/zip'
         ],
     ],
 
@@ -126,6 +125,12 @@ return [
             "max_size" => env("MEDIA_COLLECTION_AVATAR_MAX_SIZE", 1024 * 1024), // 1MB
             "mime_type" => env("MEDIA_COLLECTION_AVATAR_MIME_TYPE", 'image'), // image: image mime type
         ],
+        'archive' => [
+            'disk' => env("MEDIA_COLLECTION_ARCHIVE_DISK", 'media_archive'),
+            "duplicate_content" => env("MEDIA_COLLECTION_ARCHIVE_DUPLICATE_CONTENT", false),
+            "max_size" => env("MEDIA_COLLECTION_ARCHIVE_MAX_SIZE", 1024 * 1024 * 1024 * 3), // 3GB
+            "mime_type" => env("MEDIA_COLLECTION_ARCHIVE_MIME_TYPE", 'archive'), // archive: archive mime type
+        ],
     ],
 
     /*
@@ -153,7 +158,7 @@ return [
         ],
         'media_private' => [
             'driver' => 'local',
-            'root' => storage_path('app'),
+            'root' => storage_path('app/private'),
             'throw' => false,
         ],
         'media_avatar' => [
@@ -161,6 +166,11 @@ return [
             'root' => public_path('media/uploads/avatar'),
             'url' => env('APP_URL').'/media/uploads/avatar',
             'visibility' => 'public',
+            'throw' => false,
+        ],
+        'media_archive' => [
+            'driver' => 'local',
+            'root' => storage_path('app/archive'),
             'throw' => false,
         ],
     ],

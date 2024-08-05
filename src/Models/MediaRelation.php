@@ -79,10 +79,8 @@ class MediaRelation extends Pivot
 
     /**
      * Get the mediaable resource attribute.
-     *
-     * @return mixed|null
      */
-    public function getMediaableResourceAttribute(): mixed
+    public function getMediaableResourceAttribute()
     {
         $event = new MediaableResourceEvent($this->mediaable);
         event($event);

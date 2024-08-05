@@ -21,7 +21,7 @@ use JobMetric\PackageCore\Models\HasUuid;
  * @property mixed mime_type
  * @property mixed size
  * @property mixed content_id
- * @property mixed additional
+ * @property mixed info
  * @property mixed disk
  * @property mixed collection
  * @property mixed uuid
@@ -49,7 +49,7 @@ class Media extends Model
         'mime_type',
         'size',
         'content_id',
-        'additional',
+        'info',
         'disk',
         'collection',
         'uuid',
@@ -63,7 +63,7 @@ class Media extends Model
         'mime_type' => 'string',
         'size' => 'integer',
         'content_id' => 'string',
-        'additional' => 'array',
+        'info' => 'array',
         'disk' => 'string',
         'collection' => 'string',
         'uuid' => 'string',
@@ -77,12 +77,12 @@ class Media extends Model
 
     public function children(): HasMany
     {
-        return $this->hasMany(Media::class, 'parent_id', 'id');
+        return $this->hasMany(Media::class, 'parent_id', 'id')->with('children');
     }
 
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(Media::class, 'parent_id', 'id');
+        return $this->belongsTo(Media::class, 'parent_id');
     }
 
     public function mediaRelations(): HasMany
@@ -92,7 +92,7 @@ class Media extends Model
 
     public function paths(): HasMany
     {
-        return $this->hasMany(MediaPath::class, 'media_id', 'id');
+        return $this->hasMany(MediaPath::class, 'media_id', 'id')->orderBy('level');
     }
 
     /**

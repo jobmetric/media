@@ -110,9 +110,9 @@ trait ZipArchiveMedia
         // update the zip file
         Storage::disk('media_archive')->put($uuid . '.zip', file_get_contents($zipFile));
 
-        $additional = [];
+        $info = [];
         if (auth()->guard()->check()) {
-            $additional['user_id'] = auth()->guard()->id();
+            $info['user_id'] = auth()->guard()->id();
         }
 
         $mime_type = 'application/zip';
@@ -129,7 +129,7 @@ trait ZipArchiveMedia
             'mime_type' => $mime_type,
             'size' => $size,
             'content_id' => $content_id,
-            'additional' => $additional,
+            'info' => $info,
             'disk' => 'media_archive',
             'collection' => 'archive',
             'uuid' => $uuid,

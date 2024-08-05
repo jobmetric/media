@@ -46,7 +46,7 @@ return new class extends Migration {
              * if the type=c -> content_id=null else content_id=sha1(file)
              */
 
-            $table->json('additional')->nullable();
+            $table->json('info')->nullable();
             /**
              * user_id: 0 -> anonymous, x>0 -> user
              * responsive

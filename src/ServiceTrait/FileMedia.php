@@ -132,9 +132,9 @@ trait FileMedia
             throw new Exception($exception->getMessage(), $exception->getCode());
         }
 
-        $additional = [];
+        $info = [];
         if (auth()->guard()->check()) {
-            $additional['user_id'] = auth()->guard()->id();
+            $info['user_id'] = auth()->guard()->id();
         }
 
         /**
@@ -147,7 +147,7 @@ trait FileMedia
             'mime_type' => $mime_type,
             'size' => $size,
             'content_id' => $content_id,
-            'additional' => $additional,
+            'info' => $info,
             'disk' => $disk,
             'collection' => $collection,
             'uuid' => $uuid,

@@ -27,7 +27,7 @@ class MediaFactory extends Factory
             'mime_type' => $this->faker->mimeType(),
             'size' => $this->faker->randomNumber(5),
             'content_id' => null,
-            'additional' => null,
+            'info' => null,
             'disk' => $this->faker->shuffleArray(['public', 's3']),
             'collection' => $this->faker->shuffleArray(['public', 'avatar']),
             'filename' => $this->faker->uuid() . '.' . $this->faker->fileExtension(),
@@ -119,16 +119,16 @@ class MediaFactory extends Factory
     }
 
     /**
-     * set additional
+     * set info
      *
-     * @param array $additional
+     * @param array $info
      *
      * @return static
      */
-    public function setAdditional(array $additional): static
+    public function setAdditional(array $info): static
     {
         return $this->state(fn(array $attributes) => [
-            'additional' => $additional
+            'info' => $info
         ]);
     }
 

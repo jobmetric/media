@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use JobMetric\Media\Facades\Media;
 use JobMetric\Media\Http\Controllers\Controller as BaseMediaController;
 use JobMetric\Media\Http\Requests\CompressRequest;
+use JobMetric\Media\Http\Requests\DetailsRequest;
 use JobMetric\Media\Http\Requests\NewFolderRequest;
 use JobMetric\Media\Http\Requests\RenameRequest;
 use JobMetric\Media\Http\Requests\UploadRequest;
@@ -25,12 +26,19 @@ class MediaController extends BaseMediaController
     public function index(Request $request): JsonResponse
     {
         $page_limit = $request->input('page_limit', 50);
+        $with = $request->input('with', []);
         $mode = $request->input('mode');
 
+        if ($request->has('filter.parent_id') && $request->input('filter.parent_id') === 'null') {
+            $request->merge(['filter' => ['parent_id' => null]]);
+        }
+
+        $filter = $request->input('filter', []);
+
         if ($page_limit == -1) {
-            $media = Media::all(mode: $mode);
+            $media = Media::all($filter, $with, $mode);
         } else {
-            $media = Media::paginate(page_limit: $page_limit, mode: $mode);
+            $media = Media::paginate($filter, $page_limit, $with, $mode);
         }
 
         return $this->responseCollection($media);
@@ -80,13 +88,14 @@ class MediaController extends BaseMediaController
      * Get Details the media
      *
      * @param MediaModel $media
+     * @param DetailsRequest $request
      *
      * @return JsonResponse
      */
-    public function details(MediaModel $media): JsonResponse
+    public function details(MediaModel $media, DetailsRequest $request): JsonResponse
     {
         return $this->response(
-            Media::details($media->id)
+            Media::details($media->id, $request->with ?? [])
         );
     }
 

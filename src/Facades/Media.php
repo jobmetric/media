@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Symfony\Component\HttpFoundation\StreamedResponse download(int $media_id)
  * @method static string temporaryUrl(int $media_id, int $expire_time = 60)
  * @method static void stream(int $media_id)
- * @method static array details(int $media_id)
+ * @method static array details(int $media_id, array $with = [])
  * @method static \Illuminate\Http\Resources\Json\AnonymousResourceCollection usedIn(int $media_id)
  * @method static bool hasUsed(int $media_id)
  * @method static array compress(array $media_ids, string $name)

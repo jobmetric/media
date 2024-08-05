@@ -99,16 +99,17 @@ class Media
      * Details media
      *
      * @param int $media_id
+     * @param array $with
      *
      * @return array
      * @throws Throwable
      */
-    public function details(int $media_id): array
+    public function details(int $media_id, array $with = []): array
     {
         /**
          * @var MediaModel $media
          */
-        $media = MediaModel::withTrashed()->find($media_id);
+        $media = MediaModel::withTrashed()->with($with)->find($media_id);
 
         if (!$media) {
             throw new MediaNotFoundException($media_id);
@@ -142,10 +143,6 @@ class Media
 
         if (!$media) {
             throw new MediaNotFoundException($media_id);
-        }
-
-        if ($media->type == MediaTypeEnum::FOLDER()) {
-            throw new MediaTypeNotMatchException($media_id, 'file');
         }
 
         $media_relations = MediaRelation::query()->where([

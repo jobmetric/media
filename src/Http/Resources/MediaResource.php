@@ -14,7 +14,7 @@ use JobMetric\Media\Enums\MediaTypeEnum;
  * @property mixed mime_type
  * @property mixed size
  * @property mixed content_id
- * @property mixed additional
+ * @property mixed info
  * @property mixed disk
  * @property mixed collection
  * @property mixed uuid
@@ -23,6 +23,7 @@ use JobMetric\Media\Enums\MediaTypeEnum;
  * @property mixed deleted_at
  * @property mixed created_at
  * @property mixed updated_at
+ * @property mixed|true $loadedParent
  */
 class MediaResource extends JsonResource
 {
@@ -46,7 +47,6 @@ class MediaResource extends JsonResource
                 'mime_type' => $this->mime_type,
                 'size' => $this->size,
                 'content_id' => $this->content_id,
-                'additional' => $this->additional,
                 'disk' => $this->disk,
                 'collection' => $this->collection,
                 'extension' => $this->extension,
@@ -55,9 +55,27 @@ class MediaResource extends JsonResource
         }
 
         return array_merge($params, [
+            'info' => $this->info,
             'deleted_at' => $this->deleted_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+
+            'parent' => $this->whenLoaded('parent', function () {
+                if (!$this->loadedParent) {
+                    $this->loadedParent = true;
+                    return new MediaResource($this->parent);
+                }
+                return null;
+            }),
+            'children' => $this->whenLoaded('children', function () {
+                return MediaResource::collection($this->children);
+            }),
+            'media_relations' => $this->whenLoaded('mediaRelations', function () {
+                return MediaRelationResource::collection($this->mediaRelations);
+            }),
+            'paths' => $this->whenLoaded('paths', function () {
+                return MediaPathResource::collection($this->paths);
+            }),
         ]);
     }
 }

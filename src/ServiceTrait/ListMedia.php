@@ -2,9 +2,11 @@
 
 namespace JobMetric\Media\ServiceTrait;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use JobMetric\Media\Http\Resources\MediaResource;
 use JobMetric\Media\Models\Media;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
@@ -33,7 +35,7 @@ trait ListMedia
             'mime_type',
             'size',
             'content_id',
-            'additional',
+            'info',
             'disk',
             'collection',
             'uuid',
@@ -53,9 +55,19 @@ trait ListMedia
             $query->onlyTrashed();
         }
 
+        $allowed_filters = [
+            AllowedFilter::callback('user_id', function (Builder $q, $value) {
+                $q->whereJsonContains('info', ['user_id' => (int)$value]);
+            }),
+        ];
+
+        if (isset($filter['user_id'])) {
+            unset($filter['user_id']);
+        }
+
         $query->allowedFields($fields)
             ->allowedSorts($fields)
-            ->allowedFilters($fields)
+            ->allowedFilters(array_merge($fields, $allowed_filters))
             ->defaultSort([
                 'type',
                 '-created_at',

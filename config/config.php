@@ -151,7 +151,7 @@ return [
     'disks' => [
         'media_public' => [
             'driver' => 'local',
-            'root' => public_path('media/uploads'),
+            'root' => public_path('media_uploads'),
             'url' => env('APP_URL').'/media/uploads',
             'visibility' => 'public',
             'throw' => false,
@@ -163,7 +163,7 @@ return [
         ],
         'media_avatar' => [
             'driver' => 'local',
-            'root' => public_path('media/uploads/avatar'),
+            'root' => public_path('media_uploads/avatar'),
             'url' => env('APP_URL').'/media/uploads/avatar',
             'visibility' => 'public',
             'throw' => false,

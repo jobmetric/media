@@ -17,7 +17,7 @@ class BaseMedia extends BaseTestCase
      */
     public function create_image(string $name = 'test.jpg'): UploadedFile
     {
-        return UploadedFile::fake()->image($name);
+        return UploadedFile::fake()->image($name, rand(10, 100), rand(10, 100));
     }
 
     /**

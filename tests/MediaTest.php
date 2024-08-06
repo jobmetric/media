@@ -4,6 +4,7 @@ namespace JobMetric\Media\Tests;
 
 use Illuminate\Support\Facades\Storage;
 use JobMetric\Media\Enums\MediaTypeEnum;
+use JobMetric\Media\Exceptions\MediaMustInSameFolderException;
 use JobMetric\Media\Exceptions\MediaNameInvalidException;
 use JobMetric\Media\Exceptions\MediaNotFoundException;
 use JobMetric\Media\Exceptions\MediaSameNameException;
@@ -381,6 +382,73 @@ class MediaTest extends BaseMedia
      */
     public function test_compress()
     {
+        $file_1 = $this->create_image();
+        $file_2 = $this->create_image();
+        $file_3 = $this->create_image();
+        $file_4 = $this->create_image();
+
+        $folder_a = Media::newFolder('a');
+        $folder_a1 = Media::newFolder('a1', $folder_a['data']->id);
+        $folder_b = Media::newFolder('b');
+
+        $response_file_1 = $this->post(route('media.upload'), [
+            'file' => $file_1,
+            'parent_id' => $folder_a['data']->id
+        ])->json();
+
+        $response_file_2 = $this->post(route('media.upload'), [
+            'file' => $file_2,
+            'parent_id' => $folder_a1['data']->id
+        ])->json();
+
+        $response_file_3 = $this->post(route('media.upload'), [
+            'file' => $file_3,
+            'parent_id' => $folder_b['data']->id
+        ])->json();
+
+        $response_file_4 = $this->post(route('media.upload'), [
+            'file' => $file_4
+        ])->json();
+
+        // check file selected in different folder
+        try {
+            Media::compress([
+                $response_file_1['data']['id'],
+                $response_file_2['data']['id'],
+                $response_file_3['data']['id'],
+                $response_file_4['data']['id']
+            ], 'test');
+        } catch (Throwable $e) {
+            $this->assertInstanceOf(MediaMustInSameFolderException::class, $e);
+        }
+
+        $compress = Media::compress([
+            $folder_a['data']['id'],
+            $folder_b['data']['id'],
+            $response_file_4['data']['id']
+        ], 'test');
+
+        $this->assertTrue($compress['ok']);
+        $this->assertEquals($compress['message'], trans('media::base.messages.zipped'));
+        $this->assertInstanceOf(MediaResource::class, $compress['data']);
+        $this->assertEquals(201, $compress['status']);
+
+        $this->assertDatabaseHas(config('media.tables.media'), [
+            'name' => 'test',
+            'parent_id' => null,
+            'type' => MediaTypeEnum::FILE(),
+            'mime_type' => 'application/zip',
+            'content_id' => $compress['data']->content_id,
+            'disk' => $compress['data']->disk,
+            'collection' => $compress['data']->collection,
+            'extension' => 'zip',
+        ]);
+
+        // check exist file in the path
+        $this->assertTrue(Storage::disk($compress['data']->disk)->exists($compress['data']->filename));
+
+        // remove test file
+        Storage::disk($compress['data']->disk)->delete($compress['data']->filename);
     }
 
     /**

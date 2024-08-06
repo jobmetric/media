@@ -15,6 +15,7 @@ use JobMetric\Media\Exceptions\MediaMaxSizeException;
 use JobMetric\Media\Exceptions\MediaMimeTypeException;
 use JobMetric\Media\Exceptions\MediaNameInvalidException;
 use JobMetric\Media\Exceptions\MediaNotFoundException;
+use JobMetric\Media\Exceptions\MediaSameNameException;
 use JobMetric\Media\Exceptions\MediaTypeNotMatchException;
 use JobMetric\Media\Http\Resources\MediaResource;
 use JobMetric\Media\Models\Media;
@@ -125,6 +126,17 @@ trait FileMedia
         $uuid = (string)Str::uuid();
         $extension = $file->extension();
         $filename = $uuid . '.' . $extension;
+
+        // check exist name in parent folder
+        $exist = Media::query()->where([
+            'name' => $original_name,
+            'extension' => $extension,
+            'parent_id' => $parent_id
+        ])->exists();
+
+        if ($exist) {
+            throw new MediaSameNameException($original_name . '.' . $extension);
+        }
 
         try {
             $file->storeAs($collection, $filename, $disk);

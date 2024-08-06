@@ -10,6 +10,7 @@ use JobMetric\Media\Events\ZipFileEvent;
 use JobMetric\Media\Exceptions\MediaMustInSameFolderException;
 use JobMetric\Media\Exceptions\MediaNameInvalidException;
 use JobMetric\Media\Exceptions\MediaNotFoundException;
+use JobMetric\Media\Exceptions\MediaSameNameException;
 use JobMetric\Media\Http\Resources\MediaResource;
 use JobMetric\Media\Models\Media;
 use JobMetric\Media\Models\MediaPath;
@@ -62,15 +63,28 @@ trait ZipArchiveMedia
             $media_array[] = $media;
         }
 
+        // check exist name in parent folder
+        $exist = Media::query()->where([
+            'name' => $name,
+            'extension' => 'zip',
+            'parent_id' => $parent_id
+        ])->exists();
+
+        if ($exist) {
+            throw new MediaSameNameException($name . '.zip');
+        }
+
+        $content_id = null;
         $folders = [];
         foreach ($media_array as $item) {
             if ($item->type == MediaTypeEnum::FOLDER()) {
                 $folders[] = [
                     'type' => 'folder',
                     'name' => $item->name,
-                    'sub-folder' => $this->getSubFolder($item->id),
+                    'sub-folder' => $this->getSubFolder($item->id, $content_id),
                 ];
             } else {
+                $content_id .= $item->content_id;
                 $folders[] = [
                     'type' => 'file',
                     'name' => $item->name . '.' . $item->extension,
@@ -80,13 +94,29 @@ trait ZipArchiveMedia
             }
         }
 
+        $content_id = sha1($content_id);
+
+        $media = Media::query()->where([
+            'parent_id' => $parent_id,
+            'content_id' => $content_id
+        ])->first();
+
+        if ($media) {
+            return [
+                'ok' => true,
+                'message' => trans('media::base.messages.zipped'),
+                'data' => MediaResource::make($media),
+                'status' => 200
+            ];
+        }
+
         $uuid = (string)Str::uuid();
 
         // add empty zip file
         Storage::disk('media_archive')->put($uuid . '.zip', '');
 
         // get the path current zip file
-        $zipFile = Storage::disk('media_archive')->get($uuid . '.zip');
+        $zipFile = config('filesystems.disks.media_archive.root') . '/' . $uuid . '.zip';
 
         $zip = new ZipArchive;
         if ($zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
@@ -97,8 +127,7 @@ trait ZipArchiveMedia
                         $this->addFilesToZip($item['name'], $item['sub-folder'], $zip);
                     }
                 } else {
-                    $file = Storage::disk($item['disk'])->get($item['path']);
-                    $zip->addFromString($item['name'], $file);
+                    $zip->addFromString($item['name'], Storage::disk($item['disk'])->get($item['path']));
                 }
             }
 
@@ -117,7 +146,6 @@ trait ZipArchiveMedia
 
         $mime_type = 'application/zip';
         $size = Storage::disk('media_archive')->size($uuid . '.zip');
-        $content_id = sha1(Storage::disk('media_archive')->get($uuid . '.zip'));
 
         /**
          * @var Media $media
@@ -177,7 +205,7 @@ trait ZipArchiveMedia
     {
     }
 
-    private function getSubFolder(int $parent_id): array
+    private function getSubFolder(int $parent_id, string|null &$content_id): array
     {
         $folders = [];
 
@@ -190,9 +218,10 @@ trait ZipArchiveMedia
                 $folders[] = [
                     'type' => 'folder',
                     'name' => $item->name,
-                    'sub-folder' => $this->getSubFolder($item->id),
+                    'sub-folder' => $this->getSubFolder($item->id, $content_id),
                 ];
             } else {
+                $content_id .= $item->content_id;
                 $folders[] = [
                     'type' => 'file',
                     'name' => $item->name . '.' . $item->extension,
@@ -212,8 +241,7 @@ trait ZipArchiveMedia
                 $zip->addEmptyDir("$folderName/$key");
                 $this->addFilesToZip("$folderName/$key", $item['sub-folder'], $zip);
             } else {
-                $file = Storage::disk($item['disk'])->get($item['path']);
-                $zip->addFromString("$folderName/$key", $file);
+                $zip->addFromString("$folderName/" . $item['name'], Storage::disk($item['disk'])->get($item['path']));
             }
         }
     }

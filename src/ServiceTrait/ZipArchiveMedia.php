@@ -238,8 +238,8 @@ trait ZipArchiveMedia
     {
         foreach ($items as $key => $item) {
             if ($item['type'] == 'folder') {
-                $zip->addEmptyDir("$folderName/$key");
-                $this->addFilesToZip("$folderName/$key", $item['sub-folder'], $zip);
+                $zip->addEmptyDir("$folderName/" . $item['name']);
+                $this->addFilesToZip("$folderName/" . $item['name'], $item['sub-folder'], $zip);
             } else {
                 $zip->addFromString("$folderName/" . $item['name'], Storage::disk($item['disk'])->get($item['path']));
             }

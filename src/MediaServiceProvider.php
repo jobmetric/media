@@ -2,6 +2,7 @@
 
 namespace JobMetric\Media;
 
+use Illuminate\Support\Facades\Blade;
 use JobMetric\PackageCore\Exceptions\MigrationFolderNotFoundException;
 use JobMetric\PackageCore\Exceptions\RegisterClassTypeNotFoundException;
 use JobMetric\PackageCore\PackageCore;
@@ -25,6 +26,7 @@ class MediaServiceProvider extends PackageCoreServiceProvider
             ->hasTranslation()
             ->hasMigration()
             ->hasRoute()
+            ->hasComponent()
             ->registerClass('Media', Media::class);
     }
 
@@ -39,5 +41,8 @@ class MediaServiceProvider extends PackageCoreServiceProvider
         foreach (config('media.disks') as $disk => $config) {
             config()->set("filesystems.disks.{$disk}", $config);
         }
+
+        // add alias for components
+        Blade::component('media::components.file-manager', 'file-manager');
     }
 }

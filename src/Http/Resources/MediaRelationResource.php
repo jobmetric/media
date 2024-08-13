@@ -31,7 +31,10 @@ class MediaRelationResource extends JsonResource
             'collection' => $this->collection,
             'created_at' => $this->created_at,
 
-            'media' => $this->media,
+            'media' => $this->whenLoaded('media', function () {
+                return new MediaResource($this->media);
+            }),
+
             'mediaable' => $this?->mediaable_resource
         ];
     }

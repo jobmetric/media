@@ -17,6 +17,8 @@ return [
         "rules" => [
             "media_exist" => "The media does not exist!",
             "media_most_folder" => "The media must be a folder!",
+            "media_most_file" => "The media must be a file!",
+            "media_most_file_mime_type" => "The media type must be one of the following: :mimeTypes",
             "media_collection_exist" => "The ':collection' collection is not in the media config!",
         ],
     ],

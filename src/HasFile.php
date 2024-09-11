@@ -40,26 +40,6 @@ trait HasFile
     }
 
     /**
-     * media allow collections.
-     *
-     * @return array
-     */
-    public function mediaAllowCollections(): array
-    {
-        return [
-            'base' => [
-                'media_collection' => 'public',
-                'size' => [
-                    'default' => [
-                        'w' => config('media.default_image_size.width'),
-                        'h' => config('media.default_image_size.height'),
-                    ]
-                ]
-            ],
-        ];
-    }
-
-    /**
      * media has many relationships
      *
      * @return MorphToMany

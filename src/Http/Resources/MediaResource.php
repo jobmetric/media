@@ -45,6 +45,7 @@ class MediaResource extends JsonResource
         if($this->type == MediaTypeEnum::FILE()) {
              $params = array_merge($params, [
                 'mime_type' => $this->mime_type,
+                'mime_group' => getMimeGroup($this->mime_type),
                 'size' => $this->size,
                 'content_id' => $this->content_id,
                 'disk' => $this->disk,

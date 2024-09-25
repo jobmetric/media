@@ -61,8 +61,17 @@ trait ListMedia
             }),
         ];
 
+        $filter_like = [];
         if (isset($filter['user_id'])) {
             unset($filter['user_id']);
+        }
+
+        if (array_key_exists('name', $filter)) {
+            if (!($filter['name'] === null || $filter['name'] === '')) {
+                $filter_like[] = ['name', 'LIKE', '%' . $filter['name'] . '%'];
+            }
+
+            unset($filter['name']);
         }
 
         $query->allowedFields($fields)
@@ -73,7 +82,8 @@ trait ListMedia
                 '-created_at',
                 'name'
             ])
-            ->where($filter);
+            ->where($filter)
+            ->where($filter_like);
 
         if (!empty($with)) {
             $query->with($with);

@@ -13,6 +13,7 @@ use JobMetric\Media\Http\Requests\RenameRequest;
 use JobMetric\Media\Http\Requests\UploadRequest;
 use JobMetric\Media\Models\Media as MediaModel;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Throwable;
 
 class MediaController extends BaseMediaController
 {
@@ -109,9 +110,13 @@ class MediaController extends BaseMediaController
      */
     public function rename(MediaModel $media, RenameRequest $request): JsonResponse
     {
-        return $this->response(
-            Media::rename($media->id, $request->name)
-        );
+        try {
+            return $this->response(
+                Media::rename($media->id, $request->name)
+            );
+        } catch (Throwable $exception) {
+            return $this->response(message: $exception->getMessage(), status: $exception->getCode());
+        }
     }
 
     /**

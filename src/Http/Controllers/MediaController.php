@@ -42,7 +42,12 @@ class MediaController extends BaseMediaController
             $media = Media::paginate($filter, $page_limit, $with, $mode);
         }
 
-        return $this->responseCollection($media);
+
+        try {
+            return $this->responseCollection($media);
+        } catch (Throwable $exception) {
+            return $this->response(message: $exception->getMessage(), status: $exception->getCode());
+        }
     }
 
     /**
@@ -54,9 +59,13 @@ class MediaController extends BaseMediaController
      */
     public function newFolder(NewFolderRequest $request): JsonResponse
     {
-        return $this->response(
-            Media::newFolder($request->name, $request->parent_id)
-        );
+        try {
+            return $this->response(
+                Media::newFolder($request->name, $request->parent_id)
+            );
+        } catch (Throwable $exception) {
+            return $this->response(message: $exception->getMessage(), status: $exception->getCode());
+        }
     }
 
     /**
@@ -68,9 +77,13 @@ class MediaController extends BaseMediaController
      */
     public function upload(UploadRequest $request): JsonResponse
     {
-        return $this->response(
-            Media::upload($request->parent_id, $request->collection)
-        );
+        try {
+            return $this->response(
+                Media::upload($request->parent_id, $request->collection)
+            );
+        } catch (Throwable $exception) {
+            return $this->response(message: $exception->getMessage(), status: $exception->getCode());
+        }
     }
 
     /**
@@ -78,11 +91,16 @@ class MediaController extends BaseMediaController
      *
      * @param MediaModel $media
      *
-     * @return StreamedResponse
+     * @return JsonResponse|StreamedResponse
      */
-    public function download(MediaModel $media): StreamedResponse
+    public function download(MediaModel $media): JsonResponse|StreamedResponse
     {
-        return Media::download($media->id);
+        try {
+            return Media::download($media->id);
+        } catch (Throwable $exception) {
+            return $this->response(message: $exception->getMessage(), status: $exception->getCode());
+        }
+
     }
 
     /**
@@ -95,9 +113,13 @@ class MediaController extends BaseMediaController
      */
     public function details(MediaModel $media, DetailsRequest $request): JsonResponse
     {
-        return $this->response(
-            Media::details($media->id, $request->with ?? [])
-        );
+        try {
+            return $this->response(
+                Media::details($media->id, $request->with ?? [])
+            );
+        } catch (Throwable $exception) {
+            return $this->response(message: $exception->getMessage(), status: $exception->getCode());
+        }
     }
 
     /**
@@ -128,8 +150,12 @@ class MediaController extends BaseMediaController
      */
     public function compress(CompressRequest $request): JsonResponse
     {
-        return $this->response(
-            Media::compress($request->media_ids, $request->name)
-        );
+        try {
+            return $this->response(
+                Media::compress($request->media_ids, $request->name)
+            );
+        } catch (Throwable $exception) {
+            return $this->response(message: $exception->getMessage(), status: $exception->getCode());
+        }
     }
 }

@@ -62,7 +62,7 @@ return new class extends Migration {
 
             $table->string('collection')->nullable()->default('public')->index();
             /**
-             * value: public, avatar, ...
+             * value: public, private, avatar, ...
              *
              * if the type=c -> collection=null else collection=any collection
              */

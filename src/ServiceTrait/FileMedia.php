@@ -139,7 +139,7 @@ trait FileMedia
         }
 
         try {
-            $file->storeAs($collection, $filename, $disk);
+            $file->storeAs($collection . '/' . date('Y/m'), $filename, $disk);
         } catch (Exception $exception) {
             throw new Exception($exception->getMessage(), $exception->getCode());
         }
@@ -222,7 +222,9 @@ trait FileMedia
             throw new MediaTypeNotMatchException($media_id, 'file');
         }
 
-        return Storage::drive($media->disk)->download($media->collection . '/' . $media->uuid . '.' . $media->extension, $media->name . '.' . $media->extension, $headers);
+        $path = substr($media->created_at, 0, 4) . '/' . substr($media->created_at, 5, 2);
+
+        return Storage::drive($media->disk)->download($media->collection . '/' . $path . '/' . $media->uuid . '.' . $media->extension, $media->name . '.' . $media->extension, $headers);
     }
 
     /**
@@ -249,7 +251,9 @@ trait FileMedia
             throw new MediaTypeNotMatchException($media_id, 'file');
         }
 
-        return Storage::drive($media->disk)->temporaryUrl($media->collection . '/' . $media->uuid . '.' . $media->extension, now()->addMinutes($expire_time), [
+        $path = substr($media->created_at, 0, 4) . '/' . substr($media->created_at, 5, 2);
+
+        return Storage::drive($media->disk)->temporaryUrl($media->collection . '/' . $path . '/' . $media->uuid . '.' . $media->extension, now()->addMinutes($expire_time), [
             'ResponseContentType' => 'application/octet-stream',
             'ResponseContentDisposition' => 'attachment; filename=' . $media->name . '.' . $media->extension,
         ]);

@@ -24,6 +24,9 @@
         "php": "^8.1",
         "ext-json": "*",
         "ext-zip": "*",
+        "ext-exif": "*",
+        "ext-gd": "*",
+        "ext-fileinfo": "*",
         "laravel/framework": ">=9.19",
         "jobmetric/laravel-package-core": "^1.11"
     },

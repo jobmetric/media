@@ -70,9 +70,11 @@ return [
             'image/jpg',
             'image/jpeg',
             'image/png',
-            'image/gif',
             'image/bmp',
             'image/webp'
+        ],
+        'gif' => [
+            'image/gif'
         ],
         'svg' => [
             'image/svg+xml'

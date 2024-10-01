@@ -18,6 +18,7 @@ use JobMetric\Media\Exceptions\MediaNameInvalidException;
 use JobMetric\Media\Exceptions\MediaNotFoundException;
 use JobMetric\Media\Exceptions\MediaSameNameException;
 use JobMetric\Media\Exceptions\MediaTypeNotMatchException;
+use JobMetric\Media\Facades\Media as MediaFacade;
 use JobMetric\Media\Http\Resources\MediaResource;
 use JobMetric\Media\Jobs\RemoveOldConvertedFileJobs;
 use JobMetric\Media\Models\Media;
@@ -224,9 +225,9 @@ trait FileMedia
             throw new MediaTypeNotMatchException($media_id, 'file');
         }
 
-        $path = substr($media->created_at, 0, 4) . '/' . substr($media->created_at, 5, 2);
+        $file_path = MediaFacade::getMediaPath($media);
 
-        return Storage::drive($media->disk)->download($media->collection . '/' . $path . '/' . $media->uuid . '.' . $media->extension, $media->name . '.' . $media->extension, $headers);
+        return Storage::drive($media->disk)->download($file_path, $media->name . '.' . $media->extension, $headers);
     }
 
     /**
@@ -253,9 +254,9 @@ trait FileMedia
             throw new MediaTypeNotMatchException($media_id, 'file');
         }
 
-        $path = substr($media->created_at, 0, 4) . '/' . substr($media->created_at, 5, 2);
+        $file_path = MediaFacade::getMediaPath($media);
 
-        return Storage::drive($media->disk)->temporaryUrl($media->collection . '/' . $path . '/' . $media->uuid . '.' . $media->extension, now()->addMinutes($expire_time), [
+        return Storage::drive($media->disk)->temporaryUrl($file_path, now()->addMinutes($expire_time), [
             'ResponseContentType' => 'application/octet-stream',
             'ResponseContentDisposition' => 'attachment; filename=' . $media->name . '.' . $media->extension,
         ]);
@@ -313,90 +314,14 @@ trait FileMedia
     }
 
     /**
-     * convert image to webp
+     * Get media path
      *
      * @param Media $media
-     * @param bool $force_replace
      *
-     * @return void
-     * @throws Throwable
+     * @return string
      */
-    public function convertImageToWebp(Media $media, bool $force_replace = false): void
+    public function getMediaPath(Media $media): string
     {
-        ini_set('memory_limit', '-1');
-
-        try {
-            $file_path = $media->collection . '/' . substr($media->created_at, 0, 4) . '/' . substr($media->created_at, 5, 2) . '/' . $media->uuid . '.' . $media->extension;
-            $file_path = Storage::disk($media->disk)->path($file_path);
-
-            $file_type = exif_imagetype($file_path);
-            switch ($file_type) {
-                // IMAGE TYPE JPEG
-                case '2':
-                    $image = imagecreatefromjpeg($file_path);
-
-                    $input_extension = ['jpeg', 'JPEG', 'jpg', 'JPG'];
-                    break;
-
-                // IMAGE TYPE PNG
-                case '3':
-                    $image = imagecreatefrompng($file_path);
-                    imagepalettetotruecolor($image);
-                    imagealphablending($image, true);
-                    imagesavealpha($image, true);
-
-                    $input_extension = ['png', 'PNG'];
-                    break;
-
-                // IMAGE TYPE BMP
-                case '6':
-                    $image = imagecreatefrombmp($file_path);
-
-                    $input_extension = ['bmp', 'BMP'];
-                    break;
-                default:
-                    throw new Exception("Unsupported image format.");
-            }
-
-            if (!$image) {
-                throw new Exception("Failed to create image from file.");
-            }
-
-            $flag = false;
-            $output_file_path = '';
-            $file_path_part = explode('.', $file_path);
-            $extension = end($file_path_part);
-            foreach ($input_extension as $item) {
-                if ($item == $extension) {
-                    $output_file_path = Str::replaceLast($item, 'webp', $file_path);
-                    $flag = true;
-                    break;
-                }
-            }
-
-            if (!$flag) {
-                throw new Exception("Unsupported image format.");
-            }
-
-            if (file_exists($output_file_path) && !$force_replace) {
-                throw new Exception("WebP file already exists.");
-            }
-
-            if (!imagewebp($image, $output_file_path, config('media.webp_convert.quality'))) {
-                throw new Exception("Failed to convert image to WebP.");
-            }
-
-            imagedestroy($image);
-
-            $media->mime_type = mime_content_type($output_file_path);
-            $media->size = filesize($output_file_path);
-            $media->content_id = sha1_file($output_file_path);
-            $media->extension = 'webp';
-            $media->save();
-
-            RemoveOldConvertedFileJobs::dispatch($media, $extension)->delay(now()->addMinutes(5));
-        } catch (Exception $e) {
-            Log::error('Image conversion failed: ' . $e->getMessage());
-        }
+        return $media->collection . '/' . substr($media->created_at, 0, 4) . '/' . substr($media->created_at, 5, 2) . '/' . $media->uuid . '.' . $media->extension;
     }
 }

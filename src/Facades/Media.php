@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static void delete(int $media_id)
  * @method static void restore(int $media_id)
  * @method static void forceDelete(int $media_id)
- * @method static void convertImageToWebp(\JobMetric\Media\Models\Media $media)
+ * @method static string getMediaPath(\JobMetric\Media\Models\Media $media)
  *
  * @see \JobMetric\Media\Media
  */

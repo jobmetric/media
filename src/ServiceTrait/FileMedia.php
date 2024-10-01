@@ -3,7 +3,6 @@
 namespace JobMetric\Media\ServiceTrait;
 
 use Exception;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use JobMetric\Media\Enums\MediaTypeEnum;
@@ -20,7 +19,6 @@ use JobMetric\Media\Exceptions\MediaSameNameException;
 use JobMetric\Media\Exceptions\MediaTypeNotMatchException;
 use JobMetric\Media\Facades\Media as MediaFacade;
 use JobMetric\Media\Http\Resources\MediaResource;
-use JobMetric\Media\Jobs\RemoveOldConvertedFileJobs;
 use JobMetric\Media\Models\Media;
 use JobMetric\Media\Models\MediaPath;
 use Symfony\Component\HttpFoundation\StreamedResponse;

@@ -4,15 +4,19 @@ namespace JobMetric\Media\Services;
 
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use JobMetric\Media\Enums\MediaTypeEnum;
 use JobMetric\Media\Exceptions\MediaMimeTypeNotInGroupsException;
+use JobMetric\Media\Exceptions\MediaNotFoundException;
 use JobMetric\Media\Exceptions\MediaTypeNotMatchException;
 use JobMetric\Media\Facades\Media as MediaFacade;
 use JobMetric\Media\Jobs\RemoveOldConvertedFileJobs;
 use JobMetric\Media\Models\Media;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Throwable;
 
 class MediaImage
@@ -130,5 +134,121 @@ class MediaImage
         } catch (Exception $e) {
             Log::error('Image conversion failed: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Responsive image or resize image
+     *
+     * @param string $media_uuid
+     * @param int|null $width
+     * @param int|null $height
+     *
+     * @return JsonResponse|BinaryFileResponse|StreamedResponse
+     * @throws Throwable
+     */
+    public function responsive(string $media_uuid, int $width = null, int $height = null): JsonResponse|BinaryFileResponse|StreamedResponse
+    {
+        /**
+         * @var Media $media
+         */
+        $media = Media::findByUuid($media_uuid);
+
+        if (!$media) {
+            throw new MediaNotFoundException($media_uuid);
+        }
+
+        if ($media->type === MediaTypeEnum::FOLDER()) {
+            throw new MediaTypeNotMatchException($media->id, MediaTypeEnum::FILE());
+        }
+
+        if (getMimeGroup($media->mime_type) !== 'image') {
+            throw new MediaMimeTypeNotInGroupsException($media->id, 'image');
+        }
+
+        $original_file_path = MediaFacade::getMediaPath($media);
+
+        if (!Storage::disk($media->disk)->exists($original_file_path)) {
+            throw new MediaNotFoundException($media_uuid);
+        }
+
+        if ($width && $height) {
+            $cache_file_path = $this->getCachePath($media, $width, $height);
+            $cache_folder_path = $this->getCachePath($media, isFolder: true);
+
+            if (Storage::disk($media->disk)->exists($cache_file_path)) {
+                return response()->download(Storage::disk($media->disk)->path($cache_file_path));
+            } else {
+                // make resize image
+                $file_path = Storage::disk($media->disk)->path($original_file_path);
+
+                [$original_width, $original_height] = getimagesize($file_path);
+
+                $file_type = exif_imagetype($file_path);
+                $image = match ($file_type) {
+                    2 => imagecreatefromjpeg($file_path),
+                    3 => imagecreatefrompng($file_path),
+                    6 => imagecreatefrombmp($file_path),
+                    18 => imagecreatefromwebp($file_path),
+                    default => throw new Exception("Unsupported image format."),
+                };
+
+                if (!$image) {
+                    throw new Exception("Failed to create image from file.");
+                }
+
+                $scale = $width / $original_width;
+
+                $new_width = $width;
+                $new_height = (int)($original_height * $scale);
+
+                $new_image = imagecreatetruecolor($new_width, $new_height);
+
+                if ($media->mime_type == 'image/png' || $media->mime_type == 'image/webp') {
+                    imagealphablending($new_image, false);
+                    imagesavealpha($new_image, true);
+                }
+
+                imagecopyresampled($new_image, $image, 0, 0, 0, 0, $new_width, $new_height, $original_width, $original_height);
+
+                imagedestroy($image);
+
+                // make cache folder
+                Storage::disk($media->disk)->makeDirectory($cache_folder_path);
+
+                $output_file_path = Storage::disk($media->disk)->path($cache_file_path);
+
+                if (!imagewebp($new_image, $output_file_path, config('media.webp_convert.quality'))) {
+                    throw new Exception("Failed to convert image to WebP.");
+                }
+
+                // save new image
+                Storage::disk($media->disk)->put($cache_file_path, file_get_contents($output_file_path));
+
+                imagedestroy($new_image);
+
+                return response()->download($output_file_path, $media->name . '-' . $width . '-' . $height . '.' . 'webp');
+            }
+        }
+
+        return response()->download(Storage::disk($media->disk)->path($original_file_path), $media->name . '.' . $media->extension);
+    }
+
+    /**
+     * Get cache path file or folder
+     *
+     * @param Media $media
+     * @param int|null $width
+     * @param int|null $height
+     * @param bool $isFolder
+     *
+     * @return string
+     */
+    private function getCachePath(Media $media, int $width = null, int $height = null, bool $isFolder = false): string
+    {
+        if ($isFolder) {
+            return 'cache/' . $media->collection . '/' . substr($media->created_at, 0, 4) . '/' . substr($media->created_at, 5, 2);
+        }
+
+        return 'cache/' . $media->collection . '/' . substr($media->created_at, 0, 4) . '/' . substr($media->created_at, 5, 2) . '/' . $media->uuid . '-' . $width . '-' . $height . '.' . $media->extension;
     }
 }

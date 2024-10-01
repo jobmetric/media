@@ -4,14 +4,18 @@ namespace JobMetric\Media\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use JobMetric\Media\Exceptions\MediaNotFoundException;
 use JobMetric\Media\Facades\Media;
+use JobMetric\Media\Facades\MediaImage;
 use JobMetric\Media\Http\Controllers\Controller as BaseMediaController;
 use JobMetric\Media\Http\Requests\CompressRequest;
 use JobMetric\Media\Http\Requests\DetailsRequest;
+use JobMetric\Media\Http\Requests\ImageResponsiveRequest;
 use JobMetric\Media\Http\Requests\NewFolderRequest;
 use JobMetric\Media\Http\Requests\RenameRequest;
 use JobMetric\Media\Http\Requests\UploadRequest;
 use JobMetric\Media\Models\Media as MediaModel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Throwable;
 
@@ -155,6 +159,23 @@ class MediaController extends BaseMediaController
                 Media::compress($request->media_ids, $request->name)
             );
         } catch (Throwable $exception) {
+            return $this->response(message: $exception->getMessage(), status: $exception->getCode());
+        }
+    }
+
+    /**
+     * Responsive image
+     *
+     * @param ImageResponsiveRequest $request
+     *
+     * @return JsonResponse|BinaryFileResponse|StreamedResponse
+     * @throws Throwable
+     */
+    public function responsive(ImageResponsiveRequest $request): JsonResponse|BinaryFileResponse|StreamedResponse
+    {
+        try {
+            return MediaImage::responsive($request->uuid, $request->w, $request->h);
+        } catch (MediaNotFoundException $exception) {
             return $this->response(message: $exception->getMessage(), status: $exception->getCode());
         }
     }

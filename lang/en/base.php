@@ -34,7 +34,8 @@ return [
 
     "exceptions" => [
         "model_media_contract_not_found" => "Model ':model' not implements 'JobMetric\Media\Contracts\MediaContract' interface!",
-        "media_not_found" => "Media with id ':media_id' not found!",
+        "media_id_not_found" => "Media with id ':media_id' not found!",
+        "media_uuid_not_found" => "Media with uuid ':media_uuid' not found!",
         "media_type_not_match" => "Media with id ':media_id' type not match with ':type'!",
         "media_collection_not_match" => "Media with id ':media_id' has the ':media_collection' collection, but you send the ':collection' collection",
         "collection_not_in_media_allow_collection_method" => "The ':collection' collection is not in the 'media_allow_collections' function!",
@@ -46,6 +47,7 @@ return [
         "disk_not_defined_exception" => "The ':disk' disk is not defined in the filesystem config!",
         "media_max_size" => "The file size must be less than :size kilobytes!",
         "media_mime_type" => "The file type ':mime_type' is not accepted, please use the allowed ones!",
+        "media_mime_type_not_in_groups" => "The media with id ':id' and mime type ':mime_type' is not in the ':groups' group!",
         "media_must_in_same_folder" => "The selected media must be in the same folder!",
     ],
 

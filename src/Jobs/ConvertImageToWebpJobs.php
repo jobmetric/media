@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use JobMetric\Media\Facades\Media as MediaFacade;
+use JobMetric\Media\Facades\MediaImage;
 use JobMetric\Media\Models\Media;
 
 class ConvertImageToWebpJobs implements ShouldQueue
@@ -31,6 +31,6 @@ class ConvertImageToWebpJobs implements ShouldQueue
      */
     public function handle(): void
     {
-        MediaFacade::convertImageToWebp($this->media);
+        MediaImage::convertToWebp($this->media);
     }
 }

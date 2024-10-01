@@ -4,6 +4,7 @@ namespace JobMetric\Media;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Blade;
+use JobMetric\Media\Services\MediaImage;
 use JobMetric\PackageCore\Enums\RegisterClassTypeEnum;
 use JobMetric\PackageCore\Exceptions\MigrationFolderNotFoundException;
 use JobMetric\PackageCore\Exceptions\RegisterClassTypeNotFoundException;
@@ -30,6 +31,7 @@ class MediaServiceProvider extends PackageCoreServiceProvider
             ->hasRoute()
             ->hasComponent()
             ->registerClass('Media', Media::class)
+            ->registerClass('MediaImage', MediaImage::class)
             ->registerClass('event', MediaEventServiceProvider::class, RegisterClassTypeEnum::REGISTER());
     }
 

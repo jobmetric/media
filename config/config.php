@@ -115,7 +115,7 @@ return [
     */
 
     'webp_convert' => [
-        'enable' => env('MEDIA_WEBP_CONVERT_ENABLE', true),
+        'enable' => env('MEDIA_WEBP_CONVERT_ENABLE', false),
         'quality' => env('MEDIA_WEBP_CONVERT_QUALITY', 80),
     ],
 

@@ -174,7 +174,7 @@ class MediaController extends BaseMediaController
     public function responsive(ImageResponsiveRequest $request): JsonResponse|BinaryFileResponse|StreamedResponse
     {
         try {
-            return MediaImage::responsive($request->uuid, $request->w, $request->h);
+            return MediaImage::responsive($request->uuid, $request->w, $request->h, $request->m);
         } catch (MediaNotFoundException $exception) {
             return $this->response(message: $exception->getMessage(), status: $exception->getCode());
         }

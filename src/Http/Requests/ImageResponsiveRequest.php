@@ -4,8 +4,7 @@ namespace JobMetric\Media\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use JobMetric\Media\Rules\MediaExistRule;
-use JobMetric\Media\Rules\MediaMostFolderRule;
+use JobMetric\Media\Enums\MediaImageResponsiveModeEnum;
 
 class ImageResponsiveRequest extends FormRequest
 {
@@ -28,6 +27,19 @@ class ImageResponsiveRequest extends FormRequest
             'uuid' => 'required|uuid',
             'w' => 'sometimes|integer|required_with:h',
             'h' => 'sometimes|integer|required_with:w',
+            'm' => 'sometimes|string|in:' . implode(',', MediaImageResponsiveModeEnum::values()),
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'm' => $this->m ?? MediaImageResponsiveModeEnum::SCALE()
+        ]);
     }
 }

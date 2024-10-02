@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * @method static void convertToWebp(\JobMetric\Media\Models\Media $media)
- * @method static JsonResponse|BinaryFileResponse|StreamedResponse responsive(string $media_uuid, int $width = null, int $height = null)
+ * @method static JsonResponse|BinaryFileResponse|StreamedResponse responsive(string $media_uuid, int $width = null, int $height = null, string $mode = 'scale')
  *
  * @see \JobMetric\Media\Services\MediaImage
  */

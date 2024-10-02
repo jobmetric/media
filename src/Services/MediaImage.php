@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use JobMetric\Media\Enums\MediaImageResponsiveModeEnum;
 use JobMetric\Media\Enums\MediaTypeEnum;
 use JobMetric\Media\Exceptions\MediaMimeTypeNotInGroupsException;
 use JobMetric\Media\Exceptions\MediaNotFoundException;
@@ -142,11 +143,12 @@ class MediaImage
      * @param string $media_uuid
      * @param int|null $width
      * @param int|null $height
+     * @param string $mode
      *
      * @return JsonResponse|BinaryFileResponse|StreamedResponse
      * @throws Throwable
      */
-    public function responsive(string $media_uuid, int $width = null, int $height = null): JsonResponse|BinaryFileResponse|StreamedResponse
+    public function responsive(string $media_uuid, int $width = null, int $height = null, string $mode = 'scale'): JsonResponse|BinaryFileResponse|StreamedResponse
     {
         /**
          * @var Media $media
@@ -172,11 +174,11 @@ class MediaImage
         }
 
         if ($width && $height) {
-            $cache_file_path = $this->getCachePath($media, $width, $height);
+            $cache_file_path = $this->getCachePath($media, $width, $height, $mode);
             $cache_folder_path = $this->getCachePath($media, isFolder: true);
 
             if (Storage::disk($media->disk)->exists($cache_file_path)) {
-                return response()->download(Storage::disk($media->disk)->path($cache_file_path));
+                return response()->file(Storage::disk($media->disk)->path($cache_file_path));
             } else {
                 // make resize image
                 $file_path = Storage::disk($media->disk)->path($original_file_path);
@@ -196,24 +198,104 @@ class MediaImage
                     throw new Exception("Failed to create image from file.");
                 }
 
-                $scale = $width / $original_width;
+                switch ($mode) {
+                    case MediaImageResponsiveModeEnum::SCALE():
+                        $scale = $width / $original_width;
+                        $new_width = $width;
+                        $new_height = (int)($original_height * $scale);
+                        $new_image = imagecreatetruecolor($new_width, $new_height);
 
-                $new_width = $width;
-                $new_height = (int)($original_height * $scale);
+                        if ($media->mime_type == 'image/png' || $media->mime_type == 'image/webp') {
+                            imagealphablending($new_image, false);
+                            imagesavealpha($new_image, true);
+                        }
 
-                $new_image = imagecreatetruecolor($new_width, $new_height);
+                        imagecopyresampled($new_image, $image, 0, 0, 0, 0, $new_width, $new_height, $original_width, $original_height);
+                        break;
 
-                if ($media->mime_type == 'image/png' || $media->mime_type == 'image/webp') {
-                    imagealphablending($new_image, false);
-                    imagesavealpha($new_image, true);
+                    case MediaImageResponsiveModeEnum::CONTAIN():
+                        $scale = min($width / $original_width, $height / $original_height);
+                        $new_width = (int)($original_width * $scale);
+                        $new_height = (int)($original_height * $scale);
+                        $new_image = imagecreatetruecolor($width, $height);
+
+                        // white color for background
+                        $white = imagecolorallocate($new_image, 255, 255, 255);
+                        imagefill($new_image, 0, 0, $white);
+
+                        if ($media->mime_type == 'image/png' || $media->mime_type == 'image/webp') {
+                            imagealphablending($new_image, false);
+                            imagesavealpha($new_image, true);
+                        }
+
+                        imagecopyresampled($new_image, $image, ($width - $new_width) / 2, ($height - $new_height) / 2, 0, 0, $new_width, $new_height, $original_width, $original_height);
+                        break;
+
+                    case MediaImageResponsiveModeEnum::COVER():
+                        $scale = max($width / $original_width, $height / $original_height);
+                        $new_width = (int)($original_width * $scale);
+                        $new_height = (int)($original_height * $scale);
+                        $new_image = imagecreatetruecolor($width, $height);
+
+                        if ($media->mime_type == 'image/png' || $media->mime_type == 'image/webp') {
+                            imagealphablending($new_image, false);
+                            imagesavealpha($new_image, true);
+                        }
+
+                        imagecopyresampled($new_image, $image, 0, 0, ($new_width - $width) / 2, ($new_height - $height) / 2, $new_width, $new_height, $original_width, $original_height);
+                        break;
+
+                    case MediaImageResponsiveModeEnum::FIT():
+                        $scale = min($width / $original_width, $height / $original_height);
+                        $new_width = (int)($original_width * $scale);
+                        $new_height = (int)($original_height * $scale);
+                        $new_image = imagecreatetruecolor($new_width, $new_height);
+
+                        if ($media->mime_type == 'image/png' || $media->mime_type == 'image/webp') {
+                            imagealphablending($new_image, false);
+                            imagesavealpha($new_image, true);
+                        }
+
+                        imagecopyresampled($new_image, $image, 0, 0, 0, 0, $new_width, $new_height, $original_width, $original_height);
+                        break;
+
+                    case MediaImageResponsiveModeEnum::FILL():
+                    case MediaImageResponsiveModeEnum::STRETCH():
+                        $new_image = imagecreatetruecolor($width, $height);
+
+                        if ($media->mime_type == 'image/png' || $media->mime_type == 'image/webp') {
+                            imagealphablending($new_image, false);
+                            imagesavealpha($new_image, true);
+                        }
+
+                        imagecopyresampled($new_image, $image, 0, 0, 0, 0, $width, $height, $original_width, $original_height);
+                        break;
+
+                    case MediaImageResponsiveModeEnum::CENTER():
+                        $new_image = imagecreatetruecolor($width, $height);
+
+                        if ($media->mime_type == 'image/png' || $media->mime_type == 'image/webp') {
+                            imagealphablending($new_image, false);
+                            imagesavealpha($new_image, true);
+                        }
+
+                        $white = imagecolorallocate($new_image, 255, 255, 255);
+                        imagefill($new_image, 0, 0, $white);
+                        $center_x = ($width - $original_width) / 2;
+                        $center_y = ($height - $original_height) / 2;
+                        imagecopy($new_image, $image, $center_x, $center_y, 0, 0, $original_width, $original_height);
+                        break;
+
+                    default:
+                        throw new Exception("Invalid resize mode.");
                 }
-
-                imagecopyresampled($new_image, $image, 0, 0, 0, 0, $new_width, $new_height, $original_width, $original_height);
 
                 imagedestroy($image);
 
                 // make cache folder
-                Storage::disk($media->disk)->makeDirectory($cache_folder_path);
+                if (!Storage::disk($media->disk)->exists($cache_folder_path)) {
+                    Storage::disk($media->disk)->makeDirectory($cache_folder_path);
+                }
 
                 $output_file_path = Storage::disk($media->disk)->path($cache_file_path);
 
@@ -226,11 +308,11 @@ class MediaImage
 
                 imagedestroy($new_image);
 
-                return response()->download($output_file_path, $media->name . '-' . $width . '-' . $height . '.' . 'webp');
+                return response()->file($output_file_path);
             }
         }
 
-        return response()->download(Storage::disk($media->disk)->path($original_file_path), $media->name . '.' . $media->extension);
+        return response()->file(Storage::disk($media->disk)->path($original_file_path));
     }
 
     /**
@@ -239,16 +321,17 @@ class MediaImage
      * @param Media $media
      * @param int|null $width
      * @param int|null $height
+     * @param string $mode
      * @param bool $isFolder
      *
      * @return string
      */
-    private function getCachePath(Media $media, int $width = null, int $height = null, bool $isFolder = false): string
+    private function getCachePath(Media $media, int $width = null, int $height = null, string $mode = 'scale', bool $isFolder = false): string
     {
         if ($isFolder) {
             return 'cache/' . $media->collection . '/' . substr($media->created_at, 0, 4) . '/' . substr($media->created_at, 5, 2);
         }
 
-        return 'cache/' . $media->collection . '/' . substr($media->created_at, 0, 4) . '/' . substr($media->created_at, 5, 2) . '/' . $media->uuid . '-' . $width . '-' . $height . '.' . $media->extension;
+        return 'cache/' . $media->collection . '/' . substr($media->created_at, 0, 4) . '/' . substr($media->created_at, 5, 2) . '/' . $media->uuid . '-' . $width . '-' . $height . '-' . $mode . '.' . $media->extension;
     }
 }

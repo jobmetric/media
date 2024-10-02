@@ -46,7 +46,6 @@ class MediaController extends BaseMediaController
             $media = Media::paginate($filter, $page_limit, $with, $mode);
         }
 
-
         try {
             return $this->responseCollection($media);
         } catch (Throwable $exception) {

@@ -271,7 +271,69 @@ class MediaImage
                         imagecopyresampled($new_image, $image, 0, 0, 0, 0, $width, $height, $original_width, $original_height);
                         break;
 
+                    case MediaImageResponsiveModeEnum::TL():
+                    case MediaImageResponsiveModeEnum::TOP_LEFT():
+                        $new_image = imagecreatetruecolor($width, $height);
+
+                        if ($media->mime_type == 'image/png' || $media->mime_type == 'image/webp') {
+                            imagealphablending($new_image, false);
+                            imagesavealpha($new_image, true);
+                        }
+
+                        $white = imagecolorallocate($new_image, 255, 255, 255);
+                        imagefill($new_image, 0, 0, $white);
+                        imagecopy($new_image, $image, 0, 0, 0, 0, $original_width, $original_height);
+                        break;
+
+                    case MediaImageResponsiveModeEnum::TC():
+                    case MediaImageResponsiveModeEnum::TOP_CENTER():
+                        $new_image = imagecreatetruecolor($width, $height);
+
+                        if ($media->mime_type == 'image/png' || $media->mime_type == 'image/webp') {
+                            imagealphablending($new_image, false);
+                            imagesavealpha($new_image, true);
+                        }
+
+                        $white = imagecolorallocate($new_image, 255, 255, 255);
+                        imagefill($new_image, 0, 0, $white);
+                        $center_x = ($width - $original_width) / 2;
+                        imagecopy($new_image, $image, $center_x, 0, 0, 0, $original_width, $original_height);
+                        break;
+
+                    case MediaImageResponsiveModeEnum::TR():
+                    case MediaImageResponsiveModeEnum::TOP_RIGHT():
+                        $new_image = imagecreatetruecolor($width, $height);
+
+                        if ($media->mime_type == 'image/png' || $media->mime_type == 'image/webp') {
+                            imagealphablending($new_image, false);
+                            imagesavealpha($new_image, true);
+                        }
+
+                        $white = imagecolorallocate($new_image, 255, 255, 255);
+                        imagefill($new_image, 0, 0, $white);
+                        $right_x = $width - $original_width;
+                        imagecopy($new_image, $image, $right_x, 0, 0, 0, $original_width, $original_height);
+                        break;
+
+                    case MediaImageResponsiveModeEnum::ML():
+                    case MediaImageResponsiveModeEnum::MIDDLE_LEFT():
+                        $new_image = imagecreatetruecolor($width, $height);
+
+                        if ($media->mime_type == 'image/png' || $media->mime_type == 'image/webp') {
+                            imagealphablending($new_image, false);
+                            imagesavealpha($new_image, true);
+                        }
+
+                        $white = imagecolorallocate($new_image, 255, 255, 255);
+                        imagefill($new_image, 0, 0, $white);
+                        $center_y = ($height - $original_height) / 2;
+                        imagecopy($new_image, $image, 0, $center_y, 0, 0, $original_width, $original_height);
+                        break;
+
+                    case MediaImageResponsiveModeEnum::C():
                     case MediaImageResponsiveModeEnum::CENTER():
+                    case MediaImageResponsiveModeEnum::MC():
+                    case MediaImageResponsiveModeEnum::MIDDLE_CENTER():
                         $new_image = imagecreatetruecolor($width, $height);
 
                         if ($media->mime_type == 'image/png' || $media->mime_type == 'image/webp') {
@@ -284,6 +346,67 @@ class MediaImage
                         $center_x = ($width - $original_width) / 2;
                         $center_y = ($height - $original_height) / 2;
                         imagecopy($new_image, $image, $center_x, $center_y, 0, 0, $original_width, $original_height);
+                        break;
+
+                    case MediaImageResponsiveModeEnum::MR():
+                    case MediaImageResponsiveModeEnum::MIDDLE_RIGHT():
+                        $new_image = imagecreatetruecolor($width, $height);
+
+                        if ($media->mime_type == 'image/png' || $media->mime_type == 'image/webp') {
+                            imagealphablending($new_image, false);
+                            imagesavealpha($new_image, true);
+                        }
+
+                        $white = imagecolorallocate($new_image, 255, 255, 255);
+                        imagefill($new_image, 0, 0, $white);
+                        $right_x = $width - $original_width;
+                        $center_y = ($height - $original_height) / 2;
+                        imagecopy($new_image, $image, $right_x, $center_y, 0, 0, $original_width, $original_height);
+                        break;
+
+                    case MediaImageResponsiveModeEnum::BL():
+                    case MediaImageResponsiveModeEnum::BOTTOM_LEFT():
+                        $new_image = imagecreatetruecolor($width, $height);
+
+                        if ($media->mime_type == 'image/png' || $media->mime_type == 'image/webp') {
+                            imagealphablending($new_image, false);
+                            imagesavealpha($new_image, true);
+                        }
+
+                        $white = imagecolorallocate($new_image, 255, 255, 255);
+                        imagefill($new_image, 0, 0, $white);
+                        $bottom_y = $height - $original_height;
+                        imagecopy($new_image, $image, 0, $bottom_y, 0, 0, $original_width, $original_height);
+                        break;
+
+                    case MediaImageResponsiveModeEnum::BC():
+                    case MediaImageResponsiveModeEnum::BOTTOM_CENTER():
+                        $new_image = imagecreatetruecolor($width, $height);
+
+                        if ($media->mime_type == 'image/png' || $media->mime_type == 'image/webp') {
+                            imagealphablending($new_image, false);
+                            imagesavealpha($new_image, true);
+                        }
+
+                        $white = imagecolorallocate($new_image, 255, 255, 255);
+                        imagefill($new_image, 0, 0, $white);
+                        $center_x = ($width - $original_width) / 2;
+                        $bottom_y = $height - $original_height;
+                        imagecopy($new_image, $image, $center_x, $bottom_y, 0, 0, $original_width, $original_height);
+                        break;
+
+                    case MediaImageResponsiveModeEnum::BR():
+                    case MediaImageResponsiveModeEnum::BOTTOM_RIGHT():
+                        $new_image = imagecreatetruecolor($width, $height);
+                        if ($media->mime_type == 'image/png' || $media->mime_type == 'image/webp') {
+                            imagealphablending($new_image, false);
+                            imagesavealpha($new_image, true);
+                        }
+                        $white = imagecolorallocate($new_image, 255, 255, 255);
+                        imagefill($new_image, 0, 0, $white);
+                        $right_x = $width - $original_width;
+                        $bottom_y = $height - $original_height;
+                        imagecopy($new_image, $image, $right_x, $bottom_y, 0, 0, $original_width, $original_height);
                         break;
 
                     default:

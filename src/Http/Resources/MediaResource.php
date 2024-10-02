@@ -24,6 +24,10 @@ use JobMetric\Media\Enums\MediaTypeEnum;
  * @property mixed created_at
  * @property mixed updated_at
  * @property mixed|true $loadedParent
+ * @property mixed parent
+ * @property mixed children
+ * @property mixed mediaRelations
+ * @property mixed paths
  */
 class MediaResource extends JsonResource
 {
@@ -42,8 +46,20 @@ class MediaResource extends JsonResource
             'type' => $this->type,
         ];
 
-        if($this->type == MediaTypeEnum::FILE()) {
-             $params = array_merge($params, [
+        if ($this->type == MediaTypeEnum::FILE()) {
+            if (getMimeGroup($this->mime_type) === 'image') {
+                $src = route('media.image.responsive', [
+                    'uuid' => $this->uuid,
+                    'w' => 500,
+                    'h' => 500,
+                    'm' => 'scale',
+                ]);
+            } else {
+                $src = route('media.download', [
+                    'media' => $this->id,
+                ]);
+            }
+            $params = array_merge($params, [
                 'mime_type' => $this->mime_type,
                 'mime_group' => getMimeGroup($this->mime_type),
                 'size' => $this->size,
@@ -52,7 +68,8 @@ class MediaResource extends JsonResource
                 'collection' => $this->collection,
                 'extension' => $this->extension,
                 'filename' => $this->filename,
-             ]);
+                'src' => $src,
+            ]);
         }
 
         return array_merge($params, [

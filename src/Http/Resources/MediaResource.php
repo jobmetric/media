@@ -50,9 +50,9 @@ class MediaResource extends JsonResource
             if (getMimeGroup($this->mime_type) === 'image') {
                 $src = route('media.image.responsive', [
                     'uuid' => $this->uuid,
-                    'w' => 500,
-                    'h' => 500,
-                    'm' => 'scale',
+                    'w' => 400,
+                    'h' => 400,
+                    'm' => 'cover'
                 ]);
             } else {
                 $src = route('media.download', [

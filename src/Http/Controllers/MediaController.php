@@ -9,6 +9,7 @@ use JobMetric\Media\Facades\Media;
 use JobMetric\Media\Facades\MediaImage;
 use JobMetric\Media\Http\Controllers\Controller as BaseMediaController;
 use JobMetric\Media\Http\Requests\CompressRequest;
+use JobMetric\Media\Http\Requests\DeleteRequest;
 use JobMetric\Media\Http\Requests\DetailsRequest;
 use JobMetric\Media\Http\Requests\ImageResponsiveRequest;
 use JobMetric\Media\Http\Requests\NewFolderRequest;
@@ -139,6 +140,31 @@ class MediaController extends BaseMediaController
             return $this->response(
                 Media::rename($media->id, $request->name)
             );
+        } catch (Throwable $exception) {
+            return $this->response(message: $exception->getMessage(), status: $exception->getCode());
+        }
+    }
+
+    /**
+     * Delete the media
+     *
+     * @param DeleteRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function delete(DeleteRequest $request): JsonResponse
+    {
+        try {
+            if ($request->mode === 'normal') {
+                return $this->response(
+                    Media::delete($request->ids, $request->parent_id)
+                );
+            } else {
+                // trash mode
+                return $this->response(
+                    Media::forceDelete($request->ids, $request->parent_id)
+                );
+            }
         } catch (Throwable $exception) {
             return $this->response(message: $exception->getMessage(), status: $exception->getCode());
         }

@@ -30,6 +30,7 @@ return [
         "rename" => "Media ':type' renamed successfully!",
         "details" => "Media ':type' details retrieved successfully!",
         "zipped" => "Media zipped successfully!",
+        "deleted" => "':count' media has been deleted successfully!",
     ],
 
     "exceptions" => [
@@ -49,6 +50,9 @@ return [
         "media_mime_type" => "The file type ':mime_type' is not accepted, please use the allowed ones!",
         "media_mime_type_not_in_groups" => "The media with id ':id' and mime type ':mime_type' is not in the ':groups' group!",
         "media_must_in_same_folder" => "The selected media must be in the same folder!",
+        "media_ids_not_in_parent_id" => "Media ids not in parent id!",
+        "media_ids_already_in_trash" => "Media ids already in trash!",
+        "media_ids_used_in_other_object" => "Media ids used in other object!",
     ],
 
     "media_type" => [

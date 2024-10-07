@@ -22,9 +22,9 @@ use Illuminate\Support\Facades\Facade;
  * @method static array compress(array $media_ids, string $name)
  * @method static void extract(int $media_id)
  * @method static void move(int $media_id, int $parent_id = null)
- * @method static void delete(int $media_id)
- * @method static void restore(int $media_id)
- * @method static void forceDelete(int $media_id)
+ * @method static array delete(array $media_ids, int|null $parent_id = null)
+ * @method static array restore(array $media_ids, int|null $parent_id = null)
+ * @method static array forceDelete(array $media_ids, int|null $parent_id = null)
  * @method static string getMediaPath(\JobMetric\Media\Models\Media $media)
  *
  * @see \JobMetric\Media\Media

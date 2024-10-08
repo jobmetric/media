@@ -51,7 +51,7 @@ class UploadRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'collection' => 'public',
+            'collection' => $this->collection ?? 'public',
         ]);
     }
 }

@@ -153,7 +153,7 @@ class MediaImage
         /**
          * @var Media $media
          */
-        $media = Media::findByUuid($media_uuid);
+        $media = Media::withTrashed()->where('uuid', $media_uuid)->first();
 
         if (!$media) {
             throw new MediaNotFoundException($media_uuid);

@@ -322,4 +322,16 @@ trait FileMedia
     {
         return $media->collection . '/' . substr($media->created_at, 0, 4) . '/' . substr($media->created_at, 5, 2) . '/' . $media->uuid . '.' . $media->extension;
     }
+
+    /**
+     * Get media cache paths
+     *
+     * @param Media $media
+     *
+     * @return string
+     */
+    public function getMediaCachePaths(Media $media): string
+    {
+        return 'cache/' . $media->collection . '/' . substr($media->created_at, 0, 4) . '/' . substr($media->created_at, 5, 2) . '/' . $media->uuid . '-*' . '.' . $media->extension;
+    }
 }

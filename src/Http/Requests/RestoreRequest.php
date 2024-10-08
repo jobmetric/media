@@ -5,7 +5,7 @@ namespace JobMetric\Media\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DeleteRequest extends FormRequest
+class RestoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,22 +24,7 @@ class DeleteRequest extends FormRequest
     {
         return [
             'ids' => 'required|array',
-            'ids.*' => 'integer|exists:media,id',
-            'parent_id' => 'sometimes|nullable|integer|exists:media,id',
-            'mode' => 'sometimes|string|in:normal,trash',
+            'ids.*' => 'integer|exists:media,id'
         ];
-    }
-
-    /**
-     * Prepare the data for validation.
-     *
-     * @return void
-     */
-    protected function prepareForValidation(): void
-    {
-        $this->merge([
-            'parent_id' => $this->parent_id ?? null,
-            'mode' => $this->mode ?? 'normal',
-        ]);
     }
 }

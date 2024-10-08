@@ -14,6 +14,7 @@ use JobMetric\Media\Http\Requests\DetailsRequest;
 use JobMetric\Media\Http\Requests\ImageResponsiveRequest;
 use JobMetric\Media\Http\Requests\NewFolderRequest;
 use JobMetric\Media\Http\Requests\RenameRequest;
+use JobMetric\Media\Http\Requests\RestoreRequest;
 use JobMetric\Media\Http\Requests\UploadRequest;
 use JobMetric\Media\Models\Media as MediaModel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -162,9 +163,27 @@ class MediaController extends BaseMediaController
             } else {
                 // trash mode
                 return $this->response(
-                    Media::forceDelete($request->ids, $request->parent_id)
+                    Media::forceDelete($request->ids)
                 );
             }
+        } catch (Throwable $exception) {
+            return $this->response(message: $exception->getMessage(), status: $exception->getCode());
+        }
+    }
+
+    /**
+     * Restore the media
+     *
+     * @param RestoreRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function restore(RestoreRequest $request): JsonResponse
+    {
+        try {
+            return $this->response(
+                Media::restore($request->ids)
+            );
         } catch (Throwable $exception) {
             return $this->response(message: $exception->getMessage(), status: $exception->getCode());
         }

@@ -23,9 +23,10 @@ use Illuminate\Support\Facades\Facade;
  * @method static void extract(int $media_id)
  * @method static void move(int $media_id, int $parent_id = null)
  * @method static array delete(array $media_ids, int|null $parent_id = null)
- * @method static array restore(array $media_ids, int|null $parent_id = null)
- * @method static array forceDelete(array $media_ids, int|null $parent_id = null)
+ * @method static array restore(array $media_ids)
+ * @method static array forceDelete(array $media_ids)
  * @method static string getMediaPath(\JobMetric\Media\Models\Media $media)
+ * @method static string getMediaCachePaths(\JobMetric\Media\Models\Media $media)
  *
  * @see \JobMetric\Media\Media
  */

@@ -31,6 +31,8 @@ return [
         "details" => "Media ':type' details retrieved successfully!",
         "zipped" => "Media zipped successfully!",
         "deleted" => "':count' media has been deleted successfully!",
+        "restored" => "':count' media has been restored successfully!",
+        "force_deleted" => "':count' media has been force deleted successfully!",
     ],
 
     "exceptions" => [
@@ -52,6 +54,7 @@ return [
         "media_must_in_same_folder" => "The selected media must be in the same folder!",
         "media_ids_not_in_parent_id" => "Media ids not in parent id!",
         "media_ids_already_in_trash" => "Media ids already in trash!",
+        "media_ids_already_not_trash" => "Media ids already not in trash!",
         "media_ids_used_in_other_object" => "Media ids used in other object!",
     ],
 

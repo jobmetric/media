@@ -10,13 +10,6 @@ use Throwable;
 class FileManager extends Component
 {
     /**
-     * Create a new component instance.
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * Get the view / contents that represent the component.
      * @throws Throwable
      */
@@ -33,6 +26,6 @@ class FileManager extends Component
 
         DomiFooterContent(view('media::components.modal')->render(), 'media_modal');
 
-        return view('media::components.file-manager');
+        return $this->view('media::components.file-manager');
     }
 }

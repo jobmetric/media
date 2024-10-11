@@ -28,7 +28,8 @@
         "ext-gd": "*",
         "ext-fileinfo": "*",
         "laravel/framework": ">=9.19",
-        "jobmetric/laravel-package-core": "^1.11"
+        "jobmetric/laravel-package-core": "^1.11",
+        "jobmetric/domi": "^1.7"
     },
     "autoload": {
         "files": [

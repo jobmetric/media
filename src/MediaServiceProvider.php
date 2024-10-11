@@ -5,7 +5,11 @@ namespace JobMetric\Media;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Blade;
 use JobMetric\Media\Services\MediaImage;
+use JobMetric\Media\View\Components\FileManager;
+use JobMetric\Media\View\Components\FileMultiple;
+use JobMetric\Media\View\Components\FileSingle;
 use JobMetric\PackageCore\Enums\RegisterClassTypeEnum;
+use JobMetric\PackageCore\Exceptions\AssetFolderNotFoundException;
 use JobMetric\PackageCore\Exceptions\MigrationFolderNotFoundException;
 use JobMetric\PackageCore\Exceptions\RegisterClassTypeNotFoundException;
 use JobMetric\PackageCore\PackageCore;
@@ -21,6 +25,7 @@ class MediaServiceProvider extends PackageCoreServiceProvider
      * @return void
      * @throws MigrationFolderNotFoundException
      * @throws RegisterClassTypeNotFoundException
+     * @throws AssetFolderNotFoundException
      */
     public function configuration(PackageCore $package): void
     {
@@ -30,6 +35,7 @@ class MediaServiceProvider extends PackageCoreServiceProvider
             ->hasMigration()
             ->hasRoute()
             ->hasComponent()
+            ->hasAsset()
             ->registerClass('Media', Media::class)
             ->registerClass('MediaImage', MediaImage::class)
             ->registerClass('event', MediaEventServiceProvider::class, RegisterClassTypeEnum::REGISTER());
@@ -48,7 +54,9 @@ class MediaServiceProvider extends PackageCoreServiceProvider
         }
 
         // add alias for components
-        Blade::component('media::components.file-manager', 'file-manager');
+        Blade::component(FileManager::class, 'file-manager');
+        Blade::component(FileSingle::class, 'file-single');
+        Blade::component(FileMultiple::class, 'file-multiple');
 
         // add pagination information to resource collection for add api_links to meta
         ResourceCollection::macro('paginationInformation', function ($request, $paginated, $default) {

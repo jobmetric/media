@@ -66,10 +66,10 @@ return [
     'file_manager' => [
         'selector' => [
             'single' => [
-                'select' => 'Select File',
+                'select' => 'انتخاب فایل',
                 'button' => [
-                    'edit' => 'Edit',
-                    'remove' => 'Remove',
+                    'edit' => 'ویرایش',
+                    'remove' => 'حذف',
                 ]
             ],
         ],

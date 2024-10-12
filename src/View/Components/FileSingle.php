@@ -5,7 +5,6 @@ namespace JobMetric\Media\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use JobMetric\Media\Models\Media;
 use Throwable;
 
 class FileSingle extends Component

@@ -5,7 +5,6 @@ namespace JobMetric\Media\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use JobMetric\Media\Models\Media;
 use Throwable;
 
 class FileMultiple extends Component
@@ -37,7 +36,7 @@ class FileMultiple extends Component
 
             foreach ($ids as $id) {
                 $image = $this->getFileInformation(trim($id));
-                
+
                 if ($image['image_value']) {
                     $data['images'][] = $image;
                 }

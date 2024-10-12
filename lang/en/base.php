@@ -72,6 +72,9 @@ return [
                     'remove' => 'Remove',
                 ]
             ],
+            'multiple' => [
+                'add' => 'Add Files',
+            ],
         ],
     ],
 

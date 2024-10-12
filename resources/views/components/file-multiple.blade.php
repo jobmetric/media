@@ -39,7 +39,7 @@
                     <div class="fm-multiple-add mt-3 cursor-pointer">
                         <div class="h-40px text-gray-600 border border-1 border-primary border-dashed rounded-3 bg-light-primary d-flex align-items-center justify-content-center">
                             <i class="fa fa-plus fs-5 me-2"></i>
-                            <span class="fw-bold">افزودن</span>
+                            <span class="fw-bold">{{ trans('media::base.file_manager.selector.multiple.add') }}</span>
                         </div>
                     </div>
                 </div>

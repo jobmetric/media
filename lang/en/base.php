@@ -123,8 +123,63 @@ return [
                     'select_all' => 'Select All',
                     'details' => 'Details',
                 ],
+                'upload_box' => [
+                    'title' => 'Upload List',
+                    'close' => 'Close',
+                ],
+                'details_box' => [
+                    'close' => 'Close',
+                ],
+                'footer' => [
+                    'uploads' => 'Uploads',
+                    'selected' => 'Select',
+                ],
+                'uploader' => 'Drop your file here',
+                'new_folder' => [
+                    'title' => 'New Folder',
+                    'create' => 'Create',
+                ],
+                'rename' => [
+                    'title' => 'Rename',
+                    'save' => 'Save',
+                ],
+                'question' => [
+                    'title' => 'Warning',
+                ],
+                'help' => [
+                    'title' => 'Guide to shortcut keys',
+                    'option' => [
+                        'open_help' => 'Show help',
+                        'new_folder' => 'New folder',
+                        'upload' => 'Upload file',
+                        'toggle_details' => 'Showing and not showing details',
+                        'toggle_upload_box' => 'Showing and not showing uploads',
+                        'refresh' => 'Update item list',
+                        'search' => 'Search',
+                        'select_all' => 'Select all',
+                        'multiple_choice' => 'Multiple choice',
+                        'back' => 'Back to the previous folder',
+                        'delete' => 'Delete item',
+                        'select' => 'Select file',
+                        'rename' => 'Rename item',
+                        'arrow' => 'Move between items',
+                    ]
+                ],
+                'loading' => 'Loading',
             ],
-            'code' => [],
+            'code' => [
+                'pagination' => 'Display {from} to {to} of {total} items',
+                'garbage' => [
+                    'error' => [
+                        'dont_rename' => 'You cannot rename items in the trash'
+                    ]
+                ],
+                'rename' => [
+                    'error' => [
+                        'enter_name' => 'Enter the name'
+                    ]
+                ],
+            ],
         ],
     ],
 

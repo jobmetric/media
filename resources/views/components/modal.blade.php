@@ -150,8 +150,8 @@
                                 <div id="fm-upload-box" style="display: none">
                                     <div class="w-100 h-100 hover-scroll-y scroll-ps overflow-y-auto overflow-x-hidden fm-disable-selection position-relative">
                                         <div class="position-absolute w-100 mt-5 me-4 px-3 d-flex justify-content-between align-items-center">
-                                            <span class="fs-6 fw-bold">لیست آپلودها</span>
-                                            <button type="button" class="btn btn-icon btn-circle btn-light-google w-30px h-30px" onclick="fm.upload.uploadBox.hide()" data-bs-toggle="tooltip" data-bs-placement="top" title="بستن">
+                                            <span class="fs-6 fw-bold">{{ trans('media::base.file_manager.modal.view.upload_box.title') }}</span>
+                                            <button type="button" class="btn btn-icon btn-circle btn-light-google w-30px h-30px" onclick="fm.upload.uploadBox.hide()" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ trans('media::base.file_manager.modal.view.upload_box.close') }}">
                                                 <i class="fa fa-close fs-3"></i>
                                             </button>
                                         </div>
@@ -171,7 +171,7 @@
                     <div class="col-3 h-100" id="fm-box-details" style="display: none">
                         <div class="h-100 hover-scroll-y scroll-ps overflow-y-auto overflow-x-hidden mx-n3 fm-disable-selection position-relative" dir="rtl">
                             <div class="position-absolute mt-5 ms-4">
-                                <button type="button" class="btn btn-icon btn-circle btn-light-google w-30px h-30px" onclick="fm.page.details.hide()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="بستن">
+                                <button type="button" class="btn btn-icon btn-circle btn-light-google w-30px h-30px" onclick="fm.page.details.hide()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ trans('media::base.file_manager.modal.view.details_box.close') }}">
                                     <i class="fa fa-close fs-3"></i>
                                 </button>
                             </div>
@@ -184,7 +184,7 @@
             <div class="modal-footer py-3 d-flex justify-content-between align-items-center fm-disable-selection">
                 <div class="d-flex align-items-center">
                     <div>
-                        <button class="btn btn-sm btn-light-info btn-active-light-info" id="fm-btn-upload-box-toggle">آپلودها</button>
+                        <button class="btn btn-sm btn-light-info btn-active-light-info" id="fm-btn-upload-box-toggle">{{ trans('media::base.file_manager.modal.view.footer.uploads') }}</button>
                     </div>
                     <div class="fs-1 mx-5">|</div>
                     <ol class="breadcrumb text-gray-600 fs-6 fw-semibold" id="fm-breadcrumb">
@@ -196,7 +196,7 @@
                     </ol>
                 </div>
                 <div>
-                    <button type="button" class="btn btn-primary btn-sm" id="fm-selected" onclick="fm.selector.pick()">انتخاب</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="fm-selected" onclick="fm.selector.pick()">{{ trans('media::base.file_manager.modal.view.footer.selected') }}</button>
                 </div>
             </div>
 
@@ -207,7 +207,7 @@
             <div id="fm-uploader" class="d-none">
                 <div>
                     <i class="fa fa-plus"></i>
-                    <span>فایل خود را در اینجا رها کنید</span>
+                    <span>{{ trans('media::base.file_manager.modal.view.uploader') }}</span>
                 </div>
             </div>
         </div>
@@ -218,7 +218,7 @@
     <div class="modal-dialog modal-sm modal-dialog-centered">
         <div class="modal-content shadow shadow-lg">
             <div class="modal-header py-5 fm-disable-selection">
-                <h5 class="modal-title">پوشه جدید</h5>
+                <h5 class="modal-title">{{ trans('media::base.file_manager.modal.view.new_folder.title') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -228,7 +228,7 @@
             </div>
 
             <div class="modal-footer py-3 fm-disable-selection">
-                <button type="button" class="btn btn-info btn-sm" id="fm-btn-save-new-folder" onclick="fm.page.folder.new.save()">ایجاد</button>
+                <button type="button" class="btn btn-info btn-sm" id="fm-btn-save-new-folder" onclick="fm.page.folder.new.save()">{{ trans('media::base.file_manager.modal.view.new_folder.create') }}</button>
             </div>
         </div>
     </div>
@@ -238,7 +238,7 @@
     <div class="modal-dialog modal-sm modal-dialog-centered">
         <div class="modal-content shadow shadow-lg">
             <div class="modal-header py-5 fm-disable-selection">
-                <h5 class="modal-title">تغییر نام</h5>
+                <h5 class="modal-title">{{ trans('media::base.file_manager.modal.view.rename.title') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -249,7 +249,7 @@
             </div>
 
             <div class="modal-footer py-3 fm-disable-selection">
-                <button type="button" class="btn btn-info btn-sm" id="fm-btn-save-rename" onclick="fm.page.items.rename.save()">ذخیره</button>
+                <button type="button" class="btn btn-info btn-sm" id="fm-btn-save-rename" onclick="fm.page.items.rename.save()">{{ trans('media::base.file_manager.modal.view.rename.save') }}</button>
             </div>
         </div>
     </div>
@@ -259,7 +259,7 @@
     <div class="modal-dialog modal-sm modal-dialog-centered">
         <div class="modal-content shadow shadow-lg">
             <div class="modal-header py-5 fm-disable-selection">
-                <h5 class="modal-title" id="fm-question-header">هشدار</h5>
+                <h5 class="modal-title" id="fm-question-header">{{ trans('media::base.file_manager.modal.view.question.title') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -278,7 +278,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content shadow shadow-lg">
             <div class="modal-header py-5 fm-disable-selection">
-                <h5 class="modal-title">راهنمای کلید های میانبر</h5>
+                <h5 class="modal-title">{{ trans('media::base.file_manager.modal.view.help.title') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -290,7 +290,7 @@
                             +
                             <code>H</code>
                         </td>
-                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">باز کردن راهنما</td>
+                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">{{ trans('media::base.file_manager.modal.view.help.option.open_help') }}</td>
                     </tr>
                     <tr>
                         <td class="ps-3 rounded rounded-4 rounded-end-0">
@@ -298,7 +298,7 @@
                             +
                             <code>N</code>
                         </td>
-                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">پوشه جدید</td>
+                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">{{ trans('media::base.file_manager.modal.view.help.option.new_folder') }}</td>
                     </tr>
                     <tr>
                         <td class="ps-3 rounded rounded-4 rounded-end-0">
@@ -308,7 +308,7 @@
                             یا
                             <code>insert</code>
                         </td>
-                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">آپلود فایل</td>
+                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">{{ trans('media::base.file_manager.modal.view.help.option.upload') }}</td>
                     </tr>
                     <tr>
                         <td class="ps-3 rounded rounded-4 rounded-end-0">
@@ -316,7 +316,7 @@
                             +
                             <code>D</code>
                         </td>
-                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">نمایش و عدم نمایش جزئیات</td>
+                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">{{ trans('media::base.file_manager.modal.view.help.option.toggle_details') }}</td>
                     </tr>
                     <tr>
                         <td class="ps-3 rounded rounded-4 rounded-end-0">
@@ -324,7 +324,7 @@
                             +
                             <code>Q</code>
                         </td>
-                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">نمایش و عدم نمایش آپلودها</td>
+                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">{{ trans('media::base.file_manager.modal.view.help.option.toggle_upload_box') }}</td>
                     </tr>
                     <tr>
                         <td class="ps-3 rounded rounded-4 rounded-end-0">
@@ -332,7 +332,7 @@
                             +
                             <code>E</code>
                         </td>
-                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">بروزرسانی لیست آیتم‌ها</td>
+                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">{{ trans('media::base.file_manager.modal.view.help.option.refresh') }}</td>
                     </tr>
                     <tr>
                         <td class="ps-3 rounded rounded-4 rounded-end-0">
@@ -340,7 +340,7 @@
                             +
                             <code>S</code>
                         </td>
-                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">جستجو</td>
+                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">{{ trans('media::base.file_manager.modal.view.help.option.search') }}</td>
                     </tr>
                     <tr>
                         <td class="ps-3 rounded rounded-4 rounded-end-0">
@@ -348,7 +348,7 @@
                             +
                             <code>A</code>
                         </td>
-                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">انتخاب همه</td>
+                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">{{ trans('media::base.file_manager.modal.view.help.option.select_all') }}</td>
                     </tr>
                     <tr>
                         <td class="ps-3 rounded rounded-4 rounded-end-0">
@@ -356,31 +356,31 @@
                             +
                             <code>Space</code>
                         </td>
-                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">انتخاب چندتایی</td>
+                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">{{ trans('media::base.file_manager.modal.view.help.option.multiple_choice') }}</td>
                     </tr>
                     <tr>
                         <td class="ps-3 rounded rounded-4 rounded-end-0">
                             <code>Backspace</code>
                         </td>
-                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">برگشت به پوشه قبلی</td>
+                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">{{ trans('media::base.file_manager.modal.view.help.option.back') }}</td>
                     </tr>
                     <tr>
                         <td class="ps-3 rounded rounded-4 rounded-end-0">
                             <code>Delete</code>
                         </td>
-                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">حذف آیتم</td>
+                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">{{ trans('media::base.file_manager.modal.view.help.option.delete') }}</td>
                     </tr>
                     <tr>
                         <td class="ps-3 rounded rounded-4 rounded-end-0">
                             <code>Enter</code>
                         </td>
-                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">انتخاب فایل</td>
+                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">{{ trans('media::base.file_manager.modal.view.help.option.select') }}</td>
                     </tr>
                     <tr>
                         <td class="ps-3 rounded rounded-4 rounded-end-0">
                             <code>F2</code>
                         </td>
-                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">تغییر نام</td>
+                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">{{ trans('media::base.file_manager.modal.view.help.option.rename') }}</td>
                     </tr>
                     <tr>
                         <td class="ps-3 rounded rounded-4 rounded-end-0">
@@ -397,7 +397,7 @@
                                 <i class="fa fa-arrow-right"></i>
                             </code>
                         </td>
-                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">حرکت بین آیتم‌ها</td>
+                        <td class="pe-3 rounded rounded-4 rounded-start-0 text-end">{{ trans('media::base.file_manager.modal.view.help.option.arrow') }}</td>
                     </tr>
                 </table>
             </div>
@@ -418,5 +418,5 @@
             <animate repeatCount="indefinite" dur="1s" keyTimes="0;0.499;0.5;1" calcMode="discrete" values="0;0;1;1" attributeName="fill-opacity"></animate>
         </circle>
     </svg>
-    <div class="text-white prevent-select">در حال بارگذاری</div>
+    <div class="text-white prevent-select">{{ trans('media::base.file_manager.modal.view.loading') }}</div>
 </div>

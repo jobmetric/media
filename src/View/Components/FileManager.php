@@ -22,6 +22,7 @@ class FileManager extends Component
 
         DomiLocalize('fm', [
             'mime_type' => config('media.mime_type'),
+            'trans' => trans('media::base.file_manager.modal.code'),
         ]);
 
         DomiFooterContent(view('media::components.modal')->render(), 'media_modal');

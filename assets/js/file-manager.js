@@ -199,7 +199,7 @@ const fm = {
                         $('#fm-totals').removeClass('d-none')
 
                         if (meta.from !== null && meta.to !== null && meta.total !== null) {
-                            let text_template = 'نمایش {from} تا {to} از {total} مورد'
+                            let text_template = localize?.fm?.trans?.pagination
                             text_template = text_template.replace('{from}', meta.from).replace('{to}', meta.to).replace('{total}', meta.total)
                             $('#fm-total-show').text(text_template)
                         } else {
@@ -308,7 +308,7 @@ const fm = {
                 },
                 save: function () {
                     if (fm.page.mode.is.garbage()) {
-                        fm.helper.alert.error('در سطل زباله شما نمی‌توانید آیتم‌ها را تغییر نام دهید')
+                        fm.helper.alert.error(localize?.fm?.trans?.garbage?.error?.dont_rename)
                         return
                     }
 
@@ -316,7 +316,7 @@ const fm = {
                     let name = $('#fm-text-rename').val()
 
                     if (name.length === 0) {
-                        fm.helper.alert.error('نام را وارد کنید')
+                        fm.helper.alert.error(localize?.fm?.trans?.garbage?.error?.dont_rename)
                         $('#fm-text-rename').focus()
                         return
                     }
@@ -330,10 +330,10 @@ const fm = {
                         },
                         beforeSend: function () {
                             $('.fm-error-rename').text('')
-                            $('#fm-btn-save-rename').text('در حال ذخیره سازی ...').attr('disabled', true)
+                            $('#fm-btn-save-rename').text(localize?.fm?.trans?.rename?.loading).attr('disabled', true)
                         },
                         complete: function () {
-                            $('#fm-btn-save-rename').text('ذخیره').attr('disabled', false)
+                            $('#fm-btn-save-rename').text(localize?.fm?.trans?.rename?.save).attr('disabled', false)
                         },
                         success: function (json) {
                             fm.helper.alert.success(json.message)

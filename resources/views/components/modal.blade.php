@@ -5,35 +5,35 @@
                 <div class="row w-100 ms-0">
                     <div class="col-lg-6 ps-0 order-1 order-lg-0">
                         <div class="fm-toolbox d-flex">
-                            <button type="button" class="btn btn-icon btn-circle btn-secondary rounded-4 me-2" id="fm-btn-back" onclick="fm.page.actions.back()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="برگشت">
+                            <button type="button" class="btn btn-icon btn-circle btn-secondary rounded-4 me-2" id="fm-btn-back" onclick="fm.page.actions.back()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ trans('media::base.file_manager.modal.view.toolbox.button.back') }}">
                                 <i class="las la-arrow-right fs-1"></i>
                             </button>
-                            <button type="button" class="btn btn-icon btn-circle btn-light-twitter rounded-4 me-2" id="fm-btn-refresh" onclick="fm.page.actions.refresh()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="بروزرسانی">
+                            <button type="button" class="btn btn-icon btn-circle btn-light-twitter rounded-4 me-2" id="fm-btn-refresh" onclick="fm.page.actions.refresh()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ trans('media::base.file_manager.modal.view.toolbox.button.refresh') }}">
                                 <i class="las la-sync fs-1"></i>
                             </button>
-                            <button type="button" class="btn btn-icon btn-circle btn-light-info rounded-4 me-2" id="fm-btn-new-folder" onclick="fm.modal.new_folder.show()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="پوشه جدید">
+                            <button type="button" class="btn btn-icon btn-circle btn-light-info rounded-4 me-2" id="fm-btn-new-folder" onclick="fm.modal.new_folder.show()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ trans('media::base.file_manager.modal.view.toolbox.button.new_folder') }}">
                                 <i class="las la-plus fs-1"></i>
                             </button>
-                            <button type="button" class="btn btn-icon btn-circle btn-light-danger rounded-4 me-2" id="fm-btn-remove" onclick="fm.page.items.delete.process()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="حذف">
+                            <button type="button" class="btn btn-icon btn-circle btn-light-danger rounded-4 me-2" id="fm-btn-remove" onclick="fm.page.items.delete.process()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ trans('media::base.file_manager.modal.view.toolbox.button.remove') }}">
                                 <i class="las la-trash fs-1"></i>
                             </button>
-                            <button type="button" class="btn btn-icon btn-circle btn-light-warning rounded-4 me-2 d-none" id="fm-btn-recycle" onclick="fm.page.items.recycle.process()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="بازیابی">
+                            <button type="button" class="btn btn-icon btn-circle btn-light-warning rounded-4 me-2 d-none" id="fm-btn-recycle" onclick="fm.page.items.recycle.process()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ trans('media::base.file_manager.modal.view.toolbox.button.recycle') }}">
                                 <i class="las la-recycle fs-1"></i>
                             </button>
-                            <button type="button" class="btn btn-icon w-auto px-5 btn-light-facebook rounded-4 me-2" id="fm-btn-upload" onclick="fm.upload.select()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="آپلود فایل">
+                            <button type="button" class="btn btn-icon w-auto px-5 btn-light-facebook rounded-4 me-2" id="fm-btn-upload" onclick="fm.upload.select()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ trans('media::base.file_manager.modal.view.toolbox.button.upload') }}">
                                 <i class="las la-cloud-upload-alt fs-1 me-3"></i>
-                                <span>آپلود فایل</span>
+                                <span>{{ trans('media::base.file_manager.modal.view.toolbox.button.upload_file') }}</span>
                             </button>
                         </div>
                     </div>
                     <div class="col-lg-6 pe-0 mb-3 mb-lg-0 order-0 order-lg-1">
                         <div class="d-flex justify-content-end pe-0">
                             <div class="form-check form-switch form-check-custom form-check-solid me-5 fm-disable-selection">
-                                <label class="form-check-label me-2 text-gray-600" for="fm-switch-garbage">نمایش زباله‌ها</label>
+                                <label class="form-check-label me-2 text-gray-600" for="fm-switch-garbage">{{ trans('media::base.file_manager.modal.view.toolbox.garbage') }}</label>
                                 <input class="form-check-input" type="checkbox" value="" id="fm-switch-garbage" onchange="fm.page.mode.change()"/>
                             </div>
                             <div class="position-relative me-5">
-                                <input type="text" class="form-control form-control-solid rounded-4 w-lg-400px pe-12" id="fm-search" onkeydown="fm.page.search.keydown(event)" placeholder="جستجو فایل"/>
+                                <input type="text" class="form-control form-control-solid rounded-4 w-lg-400px pe-12" id="fm-search" onkeydown="fm.page.search.keydown(event)" placeholder="{{ trans('media::base.file_manager.modal.view.toolbox.search') }}"/>
                                 <div class="position-absolute translate-middle-y top-50 end-0 me-3">
                                     <i class="ki-duotone ki-magnifier fs-1">
                                         <span class="path1"></span>
@@ -41,10 +41,10 @@
                                     </i>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-icon btn-circle btn-light-primary rounded-4 me-2" id="fm-btn-help" onclick="fm.help.show()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="راهنما">
+                            <button type="button" class="btn btn-icon btn-circle btn-light-primary rounded-4 me-2" id="fm-btn-help" onclick="fm.help.show()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ trans('media::base.file_manager.modal.view.toolbox.help') }}">
                                 <i class="las la-question fs-1"></i>
                             </button>
-                            <button type="button" class="btn btn-icon btn-circle btn-light-google rounded-4" data-bs-dismiss="modal" data-bs-toggle="tooltip" data-bs-placement="bottom" title="بستن">
+                            <button type="button" class="btn btn-icon btn-circle btn-light-google rounded-4" data-bs-dismiss="modal" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ trans('media::base.file_manager.modal.view.toolbox.close') }}">
                                 <i class="fa fa-close fs-3"></i>
                             </button>
                         </div>
@@ -62,16 +62,16 @@
                                         <div class="d-flex align-items-center">
                                             <div class="h-35px me-3">
                                                 <select class="form-select rounded h-35px fs-8 w-100px" id="fm-select-limit">
-                                                    <option value="100" selected>100 عدد</option>
-                                                    <option value="150">150 عدد</option>
-                                                    <option value="200">200 عدد</option>
-                                                    <option value="250">250 عدد</option>
-                                                    <option value="-1">همه</option>
+                                                    <option value="100" selected>{{ trans('media::base.file_manager.modal.view.toolbox.select.limit.number', ['number' => 100]) }}</option>
+                                                    <option value="150">{{ trans('media::base.file_manager.modal.view.toolbox.select.limit.number', ['number' => 150]) }}</option>
+                                                    <option value="200">{{ trans('media::base.file_manager.modal.view.toolbox.select.limit.number', ['number' => 200]) }}</option>
+                                                    <option value="250">{{ trans('media::base.file_manager.modal.view.toolbox.select.limit.number', ['number' => 250]) }}</option>
+                                                    <option value="-1">{{ trans('media::base.file_manager.modal.view.toolbox.select.limit.all') }}</option>
                                                 </select>
                                             </div>
                                             <div class="form-check form-check-custom form-check-solid">
                                                 <input class="form-check-input" type="checkbox" value="1" id="fm-select-all" onchange="fm.page.actions.select_all.change()"/>
-                                                <label class="form-check-label text-gray-600" for="fm-select-all">انتخاب همه</label>
+                                                <label class="form-check-label text-gray-600" for="fm-select-all">{{ trans('media::base.file_manager.modal.view.toolbox.select_all') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -87,12 +87,12 @@
                                                                 <span class="path4"></span>
                                                                 <span class="path5"></span>
                                                             </i>
-                                                            <span class="ms-3">چیدمان</span>
+                                                            <span class="ms-3">{{ trans('media::base.file_manager.modal.view.toolbox.select.view.name') }}</span>
                                                         </span>
                                                     <div class="overflow-hidden flex-grow-1">
                                                         <select class="form-select rounded-start-0 h-35px fs-8 w-125px appearance-none" id="fm-select-view">
-                                                            <option value="square" data-class="fas fa-th-large" selected>شبکه‌ای</option>
-                                                            <option value="list" data-class="fas fa-list">فهرستی</option>
+                                                            <option value="square" data-class="fas fa-th-large" selected>{{ trans('media::base.file_manager.modal.view.toolbox.select.view.option.square') }}</option>
+                                                            <option value="list" data-class="fas fa-list">{{ trans('media::base.file_manager.modal.view.toolbox.select.view.option.list') }}</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -104,13 +104,13 @@
                                                                 <span class="path1"></span>
                                                                 <span class="path2"></span>
                                                             </i>
-                                                            <span class="ms-3">مرتب سازی</span>
+                                                            <span class="ms-3">{{ trans('media::base.file_manager.modal.view.toolbox.select.sort.name') }}</span>
                                                         </span>
                                                     <div class="overflow-hidden flex-grow-1">
                                                         <select class="form-select rounded-start-0 h-35px fs-8 w-90px" id="fm-select-sort">
-                                                            <option value="name" selected>نام</option>
-                                                            <option value="created_at">تاریخ</option>
-                                                            <option value="size">سایز</option>
+                                                            <option value="name" selected>{{ trans('media::base.file_manager.modal.view.toolbox.select.sort.option.name') }}</option>
+                                                            <option value="created_at">{{ trans('media::base.file_manager.modal.view.toolbox.select.sort.option.date') }}</option>
+                                                            <option value="size">{{ trans('media::base.file_manager.modal.view.toolbox.select.sort.option.size') }}</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -122,12 +122,12 @@
                                                                 <span class="path1"></span>
                                                                 <span class="path2"></span>
                                                             </i>
-                                                            <span class="ms-3">ترتیب</span>
+                                                            <span class="ms-3">{{ trans('media::base.file_manager.modal.view.toolbox.select.order.name') }}</span>
                                                         </span>
                                                     <div class="overflow-hidden flex-grow-1">
                                                         <select class="form-select rounded-start-0 h-35px fs-8 w-125px" id="fm-select-order">
-                                                            <option value="" data-class="fa fa-arrow-up-wide-short" selected>صعودی</option>
-                                                            <option value="-" data-class="fa fa-arrow-down-wide-short">نزولی</option>
+                                                            <option value="" data-class="fa fa-arrow-up-wide-short" selected>{{ trans('media::base.file_manager.modal.view.toolbox.select.order.option.asc') }}</option>
+                                                            <option value="-" data-class="fa fa-arrow-down-wide-short">{{ trans('media::base.file_manager.modal.view.toolbox.select.order.option.desc') }}</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -139,7 +139,7 @@
                                                     <span class="path3"></span>
                                                     <span class="path4"></span>
                                                 </i>
-                                                <span>جزئیات</span>
+                                                <span>{{ trans('media::base.file_manager.modal.view.toolbox.details') }}</span>
                                             </button>
                                         </div>
                                     </div>

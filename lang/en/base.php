@@ -76,6 +76,56 @@ return [
                 'add' => 'Add Files',
             ],
         ],
+        'modal' => [
+            'view' => [
+                'toolbox' => [
+                    'button' => [
+                        'back' => 'Back',
+                        'refresh' => 'Refresh',
+                        'new_folder' => 'New Folder',
+                        'remove' => 'Remove',
+                        'recycle' => 'Recycle',
+                        'upload' => 'Upload',
+                        'upload_file' => 'Upload File',
+                    ],
+                    'garbage' => 'Show Garbages',
+                    'search' => 'Search File',
+                    'help' => 'Help',
+                    'close' => 'Close',
+                    'select' => [
+                        'limit' => [
+                            'number' => ':number Number',
+                            'all' => 'All',
+                        ],
+                        'view' => [
+                            'name' => 'Layout',
+                            'option' => [
+                                'square' => 'Grid',
+                                'list' => 'List',
+                            ],
+                        ],
+                        'sort' => [
+                            'name' => 'Sort',
+                            'option' => [
+                                'name' => 'Name',
+                                'date' => 'Date',
+                                'size' => 'Size',
+                            ],
+                        ],
+                        'order' => [
+                            'name' => 'Order',
+                            'option' => [
+                                'asc' => 'Ascending',
+                                'desc' => 'Descending',
+                            ],
+                        ],
+                    ],
+                    'select_all' => 'Select All',
+                    'details' => 'Details',
+                ],
+            ],
+            'code' => [],
+        ],
     ],
 
 ];

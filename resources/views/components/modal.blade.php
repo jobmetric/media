@@ -1,4 +1,4 @@
-<div class="modal fade" tabindex="-1" id="modal-file-manager">
+<div class="modal fade" tabindex="-1" id="modal-file-manager" style="z-index: 999999">
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content">
             <div class="modal-header py-3 fm-disable-selection">
@@ -214,7 +214,7 @@
     </div>
 </div>
 
-<div class="modal fade" tabindex="-1" id="modal-file-manager-new-folder">
+<div class="modal fade" tabindex="-1" id="modal-file-manager-new-folder" style="z-index: 999999">
     <div class="modal-dialog modal-sm modal-dialog-centered">
         <div class="modal-content shadow shadow-lg">
             <div class="modal-header py-5 fm-disable-selection">
@@ -234,7 +234,7 @@
     </div>
 </div>
 
-<div class="modal fade" tabindex="-1" id="modal-file-manager-rename">
+<div class="modal fade" tabindex="-1" id="modal-file-manager-rename" style="z-index: 999999">
     <div class="modal-dialog modal-sm modal-dialog-centered">
         <div class="modal-content shadow shadow-lg">
             <div class="modal-header py-5 fm-disable-selection">
@@ -255,7 +255,7 @@
     </div>
 </div>
 
-<div class="modal fade" tabindex="-1" id="modal-file-manager-question">
+<div class="modal fade" tabindex="-1" id="modal-file-manager-question" style="z-index: 999999">
     <div class="modal-dialog modal-sm modal-dialog-centered">
         <div class="modal-content shadow shadow-lg">
             <div class="modal-header py-5 fm-disable-selection">
@@ -274,7 +274,7 @@
     </div>
 </div>
 
-<div class="modal fade" tabindex="-1" id="modal-file-manager-help">
+<div class="modal fade" tabindex="-1" id="modal-file-manager-help" style="z-index: 999999">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content shadow shadow-lg">
             <div class="modal-header py-5 fm-disable-selection">
@@ -405,7 +405,7 @@
     </div>
 </div>
 
-<div id="fm-loading">
+<div id="fm-loading" style="z-index: 999999">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" width="200" height="200">
         <circle r="20" fill="#013ca6" cy="50" cx="30">
             <animate begin="-0.5s" values="30;70;30" keyTimes="0;0.5;1" dur="1s" repeatCount="indefinite" attributeName="cx"></animate>

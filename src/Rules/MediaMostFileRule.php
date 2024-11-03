@@ -30,7 +30,7 @@ class MediaMostFileRule implements ValidationRule
             $fail(__('media::base.validation.rules.media_most_file'));
         }
 
-        $configMimeTypes = config('media.mime_types');
+        $configMimeTypes = config('media.mime_type');
 
         $anyType = false;
         $mimeTypes = [];

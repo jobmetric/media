@@ -26,6 +26,7 @@ return [
     "messages" => [
         "created" => "Media ':type' created successfully!",
         "attached" => "Media attached successfully!",
+        "already_attached" => "Media already attached!",
         "detached" => "Media detached successfully!",
         "rename" => "Media ':type' renamed successfully!",
         "details" => "Media ':type' details retrieved successfully!",

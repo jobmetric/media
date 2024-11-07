@@ -34,6 +34,7 @@ use JobMetric\PackageCore\Models\HasUuid;
  * @property Media parent
  * @property Media[] children
  * @property MediaRelation[] mediaRelations
+ * @property MediaRelation pivot
  *
  * @method static Builder ofCollection(string $collection)
  * @method static find(int $media_id)

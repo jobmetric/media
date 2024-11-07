@@ -85,6 +85,15 @@ trait HasFile
             throw new MediaCollectionNotMatchException($media_id, $media->collection, $collection);
         }
 
+        if ($this->files()->wherePivot('media_id', $media_id)->wherePivot('collection', $collection)->exists()) {
+            return [
+                'ok' => true,
+                'message' => trans('media::base.messages.already_attached'),
+                'data' => MediaResource::make($media),
+                'status' => 200
+            ];
+        }
+
         $this->files()->attach($media_id, [
             'collection' => $collection
         ]);
@@ -135,5 +144,20 @@ trait HasFile
     public function getMediaByCollection(string $collection = 'base'): MorphToMany
     {
         return $this->files()->wherePivot('collection', $collection);
+    }
+
+    /**
+     * Get the media data for the object
+     *
+     * @return array
+     */
+    public function getMediaDataForObject(): array
+    {
+        $data = [];
+        foreach ($this->files as $item) {
+            $data[$item->pivot->collection][] = $item->id;
+        }
+
+        return $data;
     }
 }

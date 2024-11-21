@@ -29,7 +29,7 @@ class FileSingle extends Component
      */
     public function render(): View|Closure|string
     {
-        $data = $this->getFileInformation($this->value);
+        $data = $this->getFileInformation((int)$this->value);
 
         return view('media::components.file-single', $data);
     }

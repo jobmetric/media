@@ -35,7 +35,7 @@ class FileMultiple extends Component
             $ids = explode(',', $this->value);
 
             foreach ($ids as $id) {
-                $image = $this->getFileInformation(trim($id));
+                $image = $this->getFileInformation((int)trim($id));
 
                 if ($image['image_value']) {
                     $data['images'][] = $image;

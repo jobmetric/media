@@ -9,11 +9,11 @@ trait FileInformation
     /**
      * Get File Information
      *
-     * @param string|null $id
+     * @param int|null $id
      *
      * @return array
      */
-    public function getFileInformation(string|null $id = null): array
+    public function getFileInformation(int|null $id = null): array
     {
         /**
          * @var Media $media

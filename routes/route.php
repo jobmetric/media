@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Support\Facades\Route;
 use JobMetric\Media\Http\Controllers\MediaController;
+use JobMetric\Panelio\Facades\Middleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +15,7 @@ use JobMetric\Media\Http\Controllers\MediaController;
 
 // media
 Route::prefix('media')->name('media.')->namespace('JobMetric\Media\Http\Controllers')->group(function () {
-    Route::middleware([
-        SubstituteBindings::class
-    ])->group(function () {
+    Route::middleware(Middleware::getMiddlewares())->group(function () {
         Route::get('/', [MediaController::class, 'index'])->name('index');
         Route::post('new-folder', [MediaController::class, 'newFolder'])->name('new-folder');
         Route::post('upload', [MediaController::class, 'upload'])->name('upload');

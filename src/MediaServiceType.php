@@ -3,6 +3,7 @@
 namespace JobMetric\Media;
 
 use Closure;
+use Illuminate\Support\Collection;
 use JobMetric\Media\ServiceType\MediaBuilder;
 use Throwable;
 
@@ -85,10 +86,10 @@ trait MediaServiceType
     /**
      * Get media.
      *
-     * @return array
+     * @return Collection
      */
-    public function getMedia(): array
+    public function getMedia(): Collection
     {
-        return $this->getTypeParam('media', []);
+        return collect($this->getTypeParam('media', []));
     }
 }

@@ -2,17 +2,21 @@
 
 namespace JobMetric\Media\Http\Requests;
 
+use Illuminate\Support\Collection;
 use JobMetric\Media\Rules\MediaMostFileRule;
+use JobMetric\Media\ServiceType\Media;
 
 trait MediaTypeObjectRequest
 {
     public function renderMediaFiled(
-        array &$rules,
-        array $object_type,
+        array      &$rules,
+        bool       $hasBaseMedia,
+        Collection $media,
     ): void
     {
-        if (isset($object_type['has_base_media'])) {
-            $rules['media'] = 'array|sometimes';
+        $rules['media'] = 'array|sometimes';
+
+        if ($hasBaseMedia) {
             $rules['media.base'] = [
                 'integer',
                 'nullable',
@@ -21,30 +25,29 @@ trait MediaTypeObjectRequest
             ];
         }
 
-        if (isset($object_type['media'])) {
-            if (!array_key_exists('media', $rules)) {
-                $rules['media'] = 'array|sometimes';
-            }
-            foreach ($object_type['media'] as $media_key => $media_value) {
-                $multiple = $media_value['multiple'] ?? false;
-                $mimeTypes = $media_value['mime_types'] ?? ['image', 'svg'];
+        foreach ($media as $item) {
+            /**
+             * @var Media $item
+             */
+            $collection = $item->getCollection();
+            $multiple = $item->getMultiple();
+            $mimeTypes = $item->getMimeTypes();
 
-                if ($multiple) {
-                    $rules['media.' . $media_key] = 'array|nullable|sometimes';
-                    $rules['media.' . $media_key . '.*'] = [
-                        'integer',
-                        'nullable',
-                        'sometimes',
-                        new MediaMostFileRule($mimeTypes)
-                    ];
-                } else {
-                    $rules['media.' . $media_key] = [
-                        'integer',
-                        'nullable',
-                        'sometimes',
-                        new MediaMostFileRule($mimeTypes)
-                    ];
-                }
+            if ($multiple) {
+                $rules["media.$collection"] = 'array|nullable|sometimes';
+                $rules["media.$collection.*"] = [
+                    'integer',
+                    'nullable',
+                    'sometimes',
+                    new MediaMostFileRule($mimeTypes)
+                ];
+            } else {
+                $rules["media.$collection"] = [
+                    'integer',
+                    'nullable',
+                    'sometimes',
+                    new MediaMostFileRule($mimeTypes)
+                ];
             }
         }
     }

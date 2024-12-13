@@ -2,10 +2,19 @@
 
 namespace JobMetric\Media\ServiceType;
 
+use BadMethodCallException;
+use Throwable;
+
 /**
  * Class Media
  *
  * @package JobMetric\Media\Media
+ *
+ * @method getCollection()
+ * @method getMediaCollection()
+ * @method getMultiple()
+ * @method getMimeTypes()
+ * @method getSize()
  */
 class Media
 {
@@ -60,5 +69,58 @@ class Media
         $this->multiple = $multiple;
         $this->mimeTypes = $mimeTypes;
         $this->size = $size;
+    }
+
+    /**
+     * get the property of the media
+     *
+     * @param string $name
+     * @param array $arguments
+     *
+     * @return mixed
+     * @throws Throwable
+     */
+    public function __call(string $name, array $arguments): mixed
+    {
+        if (str_starts_with($name, 'get')) {
+            return $this->get(lcfirst(substr($name, 3)));
+        } else {
+            throw new BadMethodCallException("Method '$name' does not exist");
+        }
+    }
+
+    /**
+     * get the property of the media
+     *
+     * @param string $property
+     *
+     * @return mixed
+     * @throws Throwable
+     */
+    public function get(string $property): mixed
+    {
+        if (!property_exists($this, $property)) {
+            throw new BadMethodCallException("Property '$property' does not exist");
+        }
+
+        return $this->$property;
+    }
+
+    /**
+     * Render the media as HTML
+     *
+     * @param array|string|int|null $value
+     * @param string $name
+     *
+     * @return string
+     * @throws Throwable
+     */
+    public function render(array|string|int|null $value = null, string $name = ''): string
+    {
+        return view('media::media-field', [
+            'value' => $value,
+            'name' => $name,
+            'media' => $this,
+        ])->render();
     }
 }

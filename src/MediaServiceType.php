@@ -56,7 +56,7 @@ trait MediaServiceType
         if ($callable instanceof Closure) {
             $callable($builder = new MediaBuilder);
 
-            $this->media[] = $builder->build();
+            $this->media[$this->type][] = $builder->build();
         } else {
             foreach ($callable as $media) {
                 $builder = new MediaBuilder;
@@ -74,7 +74,7 @@ trait MediaServiceType
                     $builder->size($sizeName, $sizeValue['w'], $sizeValue['h']);
                 }
 
-                $this->media[] = $builder->build();
+                $this->media[$this->type][] = $builder->build();
             }
         }
 
@@ -90,6 +90,8 @@ trait MediaServiceType
      */
     public function getMedia(): Collection
     {
-        return collect($this->getTypeParam('media', []));
+        $media = $this->getTypeParam('media', []);
+
+        return collect($media[$this->type] ?? []);
     }
 }

@@ -47,6 +47,7 @@ trait HasDynamicFile
                  */
                 self::$dynamicMedia[$type][$media->getCollection()] = [
                     'media_collection' => $media->getMediaCollection(),
+                    'multiple' => $media->getMultiple(),
                     'size' => $media->getSize(),
                 ];
             }

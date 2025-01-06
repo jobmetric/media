@@ -3,6 +3,7 @@
 namespace JobMetric\Media;
 
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use JobMetric\Media\Enums\MediaTypeEnum;
 use JobMetric\Media\Exceptions\CollectionNotInMediaAllowCollectionMethodException;
 use JobMetric\Media\Exceptions\MediaCollectionNotMatchException;
@@ -19,13 +20,19 @@ use Throwable;
  *
  * @package JobMetric\Media
  *
- * @property Media[] files
+ * @property Media[] $media
  *
  * @method getKey()
  * @method morphToMany(string $class, string $string, string $string1)
  */
 trait HasFile
 {
+    private array $innerMedia = [];
+
+    public function initializeHasFile(): void
+    {
+        $this->mergeFillable(['media']);
+    }
     /**
      * boot has file
      *
@@ -37,6 +44,60 @@ trait HasFile
         if (!in_array('JobMetric\Media\Contracts\MediaContract', class_implements(self::class))) {
             throw new ModelMediaContractNotFoundException(self::class);
         }
+
+        $checkerClosure = function ($model) {
+            if (isset($model->attributes['media'])) {
+
+                $mediaAllowCollections = $model->mediaAllowCollections();
+                foreach ($model->attributes['media'] as $mediaCollection => $mediaValue) {
+                    if(!array_key_exists($mediaCollection , $mediaAllowCollections)){
+                        throw new CollectionNotInMediaAllowCollectionMethodException($mediaCollection);
+                    }
+                }
+
+                $model->innerMedia = $model->attributes['media'];
+                unset($model->attributes['media']);
+            }
+        };
+
+        static::creating($checkerClosure);
+        static::updating($checkerClosure);
+        static::saving($checkerClosure);
+
+        $savingAndUpdatingClosure = function ($model) {
+
+            $mediaAllowCollections = $model->mediaAllowCollections();
+            foreach ($model->innerMedia as $mediaCollection => $mediaValue) {
+                if($mediaAllowCollections[$mediaCollection]['multiple'] ?? false){
+                    foreach ($mediaValue as $mediaItem) {
+                        $model->attachMedia($mediaItem, $mediaCollection);
+                    }
+                }else{
+                    if ($mediaValue) {
+                        $model->attachMedia($mediaValue, $mediaCollection);
+                    }
+                }
+            }
+
+            $model->innerMedia = [];
+        };
+
+        static::created($savingAndUpdatingClosure);
+        static::updated($savingAndUpdatingClosure);
+        static::saved($savingAndUpdatingClosure);
+
+        static::deleted(function ($model) {
+            if (!in_array(SoftDeletes::class, class_uses_recursive($model))) {
+                $model->files()->delete();
+            }
+        });
+
+        if (method_exists(static::class, "forceDeleted")) {
+            static::forceDeleted(function ($model) {
+                $model->files()->delete();
+            });
+        }
+
     }
 
     /**

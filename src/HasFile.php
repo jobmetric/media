@@ -19,7 +19,7 @@ use Throwable;
  * Trait HasFile
  *
  * @package JobMetric\Media
- *
+ * @property Media[] $files
  * @property Media[] $media
  *
  * @method getKey()

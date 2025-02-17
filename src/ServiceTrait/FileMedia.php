@@ -140,7 +140,10 @@ trait FileMedia
         }
 
         try {
-            $file->storeAs($collection . '/' . date('Y/m'), $filename, $disk);
+            $folderName = $collection . '/' . date('Y/m');
+            Storage::disk($disk)->makeDirectory($folderName);
+
+            $file->storeAs($folderName, $filename, $disk);
         } catch (Exception $exception) {
             throw new Exception($exception->getMessage(), $exception->getCode());
         }

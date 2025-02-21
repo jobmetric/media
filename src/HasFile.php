@@ -196,6 +196,22 @@ trait HasFile
     }
 
     /**
+     * detach by collection media
+     *
+     * @param string $collection
+     *
+     * @return void
+     */
+    public function detachMediaByCollection(string $collection = 'base'): void
+    {
+        foreach ($this->files as $file) {
+            if ($file->pivot->collection == $collection) {
+                $this->files()->detach($file->id);
+            }
+        }
+    }
+
+    /**
      * Get media by collection
      *
      * @param string $collection

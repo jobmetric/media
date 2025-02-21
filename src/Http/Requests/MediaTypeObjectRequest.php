@@ -10,8 +10,8 @@ trait MediaTypeObjectRequest
 {
     public function renderMediaFiled(
         array      &$rules,
-        bool       $hasBaseMedia,
-        Collection $media,
+        bool       $hasBaseMedia = true,
+        Collection $media = null,
     ): void
     {
         $rules['media'] = 'array|sometimes';
@@ -25,7 +25,7 @@ trait MediaTypeObjectRequest
             ];
         }
 
-        foreach ($media as $item) {
+        foreach ($media ?? [] as $item) {
             /**
              * @var Media $item
              */

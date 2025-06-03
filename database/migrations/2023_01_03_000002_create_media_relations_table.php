@@ -15,7 +15,7 @@ return new class extends Migration {
     {
         // if media:type=f insert in media_relations
         Schema::create(config('media.tables.media_relation'), function (Blueprint $table) {
-            $table->foreignId('media_id')->nullable()->index()->constrained('media')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('media_id')->nullable()->index()->constrained(config('media.tables.media'))->cascadeOnUpdate()->cascadeOnDelete();
 
             $table->morphs('mediaable');
             /**

@@ -15,8 +15,8 @@ return new class extends Migration {
         Schema::create(config('media.tables.media_path'), function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('media_id')->index()->constrained('media')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('path_id')->index()->constrained('media')->restrictOnDelete()->cascadeOnUpdate();
+            $table->foreignId('media_id')->index()->constrained(config('media.tables.media'))->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('path_id')->index()->constrained(config('media.tables.media'))->restrictOnDelete()->cascadeOnUpdate();
             $table->integer('level')->default(0);
 
             $table->unique([

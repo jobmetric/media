@@ -85,19 +85,6 @@ trait HasFile
         static::created($savingAndUpdatingClosure);
         static::updated($savingAndUpdatingClosure);
         static::saved($savingAndUpdatingClosure);
-
-        static::deleted(function ($model) {
-            if (!in_array(SoftDeletes::class, class_uses_recursive($model))) {
-                $model->files()->delete();
-            }
-        });
-
-        if (method_exists(static::class, "forceDeleted")) {
-            static::forceDeleted(function ($model) {
-                $model->files()->delete();
-            });
-        }
-
     }
 
     /**

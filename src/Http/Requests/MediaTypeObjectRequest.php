@@ -4,7 +4,7 @@ namespace JobMetric\Media\Http\Requests;
 
 use Illuminate\Support\Collection;
 use JobMetric\Media\Rules\MediaMostFileRule;
-use JobMetric\Media\ServiceType\Media;
+use JobMetric\Media\Typeify\Media;
 
 trait MediaTypeObjectRequest
 {

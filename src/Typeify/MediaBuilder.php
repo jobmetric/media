@@ -1,6 +1,6 @@
 <?php
 
-namespace JobMetric\Media\ServiceType;
+namespace JobMetric\Media\Typeify;
 
 use Illuminate\Support\Traits\Macroable;
 use JobMetric\CustomField\Exceptions\OptionEmptyLabelException;

@@ -1,6 +1,6 @@
 <?php
 
-namespace JobMetric\Media\ServiceType;
+namespace JobMetric\Media\Typeify;
 
 use BadMethodCallException;
 use Throwable;

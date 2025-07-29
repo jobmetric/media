@@ -1,18 +1,17 @@
 <?php
 
-namespace JobMetric\Media;
+namespace JobMetric\Media\Typeify;
 
 use Closure;
 use Illuminate\Support\Collection;
-use JobMetric\Media\ServiceType\MediaBuilder;
 use Throwable;
 
 /**
- * Trait MediaServiceType
+ * Trait HasMediaType
  *
  * @package JobMetric\Media
  */
-trait MediaServiceType
+trait HasMediaType
 {
     /**
      * The media.

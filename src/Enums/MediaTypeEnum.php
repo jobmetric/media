@@ -2,7 +2,7 @@
 
 namespace JobMetric\Media\Enums;
 
-use JobMetric\PackageCore\Enums\EnumToArray;
+use JobMetric\PackageCore\Enums\EnumMacros;
 
 /**
  * @method static FOLDER()
@@ -10,7 +10,7 @@ use JobMetric\PackageCore\Enums\EnumToArray;
  */
 enum MediaTypeEnum: string
 {
-    use EnumToArray;
+    use EnumMacros;
 
     case FOLDER = "c";
     case FILE = "f";

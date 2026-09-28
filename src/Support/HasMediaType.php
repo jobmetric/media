@@ -14,11 +14,6 @@ use Throwable;
 trait HasMediaType
 {
     /**
-     * The media.
-     *
-     * @var array $media
-     */
-    /**
      * Set base media.
      *
      * @return static

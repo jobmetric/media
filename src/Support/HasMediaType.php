@@ -1,6 +1,6 @@
 <?php
 
-namespace JobMetric\Media\Typeify;
+namespace JobMetric\Media\Support;
 
 use Closure;
 use Illuminate\Support\Collection;
@@ -18,8 +18,6 @@ trait HasMediaType
      *
      * @var array $media
      */
-    protected array $media = [];
-
     /**
      * Set base media.
      *
@@ -55,8 +53,9 @@ trait HasMediaType
         if ($callable instanceof Closure) {
             $callable($builder = new MediaBuilder);
 
-            $this->media[$this->type][] = $builder->build();
+            $mediaItems = [$builder->build()];
         } else {
+            $mediaItems = [];
             foreach ($callable as $media) {
                 $builder = new MediaBuilder;
 
@@ -73,11 +72,11 @@ trait HasMediaType
                     $builder->size($sizeName, $sizeValue['w'], $sizeValue['h']);
                 }
 
-                $this->media[$this->type][] = $builder->build();
+                $mediaItems[] = $builder->build();
             }
         }
 
-        $this->setTypeParam('media', $this->media);
+        $this->appendTypeParam('media', $mediaItems);
 
         return $this;
     }
@@ -89,8 +88,6 @@ trait HasMediaType
      */
     public function getMedia(): Collection
     {
-        $media = $this->getTypeParam('media', []);
-
-        return collect($media[$this->type] ?? []);
+        return collect($this->getTypeParam('media', []));
     }
 }

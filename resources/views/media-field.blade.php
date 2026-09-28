@@ -1,6 +1,6 @@
 @php
     /**
-     * @var \JobMetric\Media\Typeify\Media $media
+     * @var \JobMetric\Media\Support\Media $media
      */
     $collection = $media->getCollection();
     $name = str_replace('{collection}', $collection, $name);

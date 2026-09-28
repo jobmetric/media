@@ -2,7 +2,7 @@
 
 namespace JobMetric\Media;
 
-use JobMetric\Media\Typeify\Media;
+use JobMetric\Media\Support\Media;
 
 /**
  * @property static array $dynamicMedia

@@ -18,12 +18,12 @@ trait HasDynamicFile
      */
     public static function bootHasDynamicFile(): void
     {
-        $serviceType = getServiceTypeClass(static::class);
+        $serviceType = static::typeRegistry();
 
-        $types = $serviceType->getTypes();
+        $types = $serviceType->values();
 
         foreach ($types as $type) {
-            $innerType = $serviceType->type($type);
+            $innerType = $serviceType->for($type);
 
             if ($innerType->hasBaseMedia()) {
                 self::$dynamicMedia[$type]['base'] = [

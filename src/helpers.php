@@ -33,7 +33,7 @@ if (!function_exists('getFileIcon')) {
      *
      * @return string
      */
-    function getFileIcon(string $type, string $className = null): string
+    function getFileIcon(string $type, ?string $className = null): string
     {
         $icon = '';
         switch ($type) {

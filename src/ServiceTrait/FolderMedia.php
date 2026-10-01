@@ -138,7 +138,7 @@ trait FolderMedia
      */
     private function isValidFolderName(string $folderName): bool|int
     {
-        $pattern = '/^(?!-)[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$/';
+        $pattern = '/^(?![.\s-])[\pL\pN\pM][\pL\pN\pM ._-]*$/u';
 
         return preg_match($pattern, $folderName);
     }

@@ -118,7 +118,7 @@ trait FileMedia
         }
 
         // check the file name
-        $original_name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $original_name = pathinfo(basename($file->getClientOriginalName()), PATHINFO_FILENAME);
 
         if (!$this->isValidFileName($original_name)) {
             throw new MediaNameInvalidException(trans('media::base.media_type.file'), $original_name);
@@ -309,7 +309,7 @@ trait FileMedia
      */
     private function isValidFileName(string $fileName): bool|int
     {
-        $pattern = '/^(?!-)[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$/';
+        $pattern = '/^(?![.\s-])[\pL\pN\pM][\pL\pN\pM ._-]*$/u';
 
         return preg_match($pattern, $fileName);
     }

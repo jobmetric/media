@@ -13,12 +13,12 @@ use JobMetric\Media\Http\Resources\MediaRelationResource;
 use JobMetric\Media\Http\Resources\MediaResource;
 use JobMetric\Media\Models\Media as MediaModel;
 use JobMetric\Media\Models\MediaRelation;
-use JobMetric\Media\ServiceTrait\{DeleteMedia, FileMedia, FolderMedia, ListMedia, ZipArchiveMedia};
+use JobMetric\Media\ServiceTrait\{BrowseMedia, DeleteMedia, FileMedia, FolderMedia, ListMedia, ZipArchiveMedia};
 use Throwable;
 
 class Media
 {
-    use ListMedia, FolderMedia, FileMedia, DeleteMedia, ZipArchiveMedia;
+    use ListMedia, BrowseMedia, FolderMedia, FileMedia, DeleteMedia, ZipArchiveMedia;
 
     /**
      * The application instance.
@@ -190,5 +190,6 @@ class Media
      */
     public function move(int $media_id, int $parent_id = null): void
     {
+        app(FileManager::class)->paste([$media_id], $parent_id, 'move');
     }
 }

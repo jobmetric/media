@@ -35,7 +35,8 @@ class FileManager
         $mime = $file->getMimeType();
         $configuration = config('media.collections.public');
         $allowed = array_merge(...array_values(config('media.mime_type', [])));
-        if (! in_array($mime, $allowed, true) || in_array($extension, ['php', 'phtml', 'phar', 'html', 'htm', 'js', 'svg'], true)) {
+        $extra = config('media.file_manager_mime_types.'.$extension, []);
+        if ((! in_array($mime, $allowed, true) && ! in_array($mime, $extra, true)) || in_array($extension, ['php', 'phtml', 'phar', 'html', 'htm', 'js', 'svg'], true)) {
             throw ValidationException::withMessages(['file' => trans('media::file-manager.unsupported')]);
         }
         $limit = (int) ($configuration['max_size'] ?? -1);

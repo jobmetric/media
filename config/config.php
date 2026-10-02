@@ -1,6 +1,18 @@
 <?php
 
 return [
+    // Additional file-manager formats are extension AND server-detected MIME checked.
+    'file_manager_mime_types' => [
+        'txt' => ['text/plain'], 'md' => ['text/plain', 'text/markdown'], 'csv' => ['text/plain', 'text/csv'],
+        'stl' => ['application/octet-stream', 'model/stl', 'application/sla', 'text/plain'],
+        'obj' => ['text/plain', 'model/obj', 'application/octet-stream'],
+        'wav' => ['audio/wav', 'audio/x-wav', 'audio/vnd.wave'],
+        'ogg' => ['audio/ogg', 'video/ogg', 'application/ogg'],
+        'flac' => ['audio/flac', 'audio/x-flac'], 'aac' => ['audio/aac', 'audio/x-hx-aac-adts'],
+        'm4a' => ['audio/mp4', 'video/mp4', 'audio/x-m4a'],
+        'webm' => ['video/webm', 'audio/webm'], 'mov' => ['video/quicktime'],
+        'mkv' => ['video/x-matroska'], 'avi' => ['video/x-msvideo', 'video/vnd.avi'],
+    ],
 
     /*
     |--------------------------------------------------------------------------

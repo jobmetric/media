@@ -13,6 +13,32 @@ use Orchestra\Testbench\TestCase;
 /** Exercise the package file tree independently of any application's database. */
 class FileManagerTest extends TestCase
 {
+    public function test_text_formats_and_custom_preview_reader(): void
+    {
+        $files = new FileManager;
+        $file = $files->upload(UploadedFile::fake()->createWithContent('notes.md', '# Safe preview'), null);
+        $this->assertSame('md', $file->extension);
+        app(\JobMetric\Media\FilePreviewRegistry::class)->register('md', function (string $path): array {
+            return ['kind' => 'text', 'content' => file_get_contents($path)];
+        });
+        $this->assertSame(['kind'=>'text', 'content'=>'# Safe preview'], app(\JobMetric\Media\FilePreview::class)->preview($file));
+        $this->expectException(\Illuminate\Validation\ValidationException::class);
+        $files->upload(UploadedFile::fake()->createWithContent('unsafe.php', '<?php echo 1;'), null);
+    }
+
+    public function test_office_preview_returns_safe_paragraphs(): void
+    {
+        $path = tempnam(sys_get_temp_dir(), 'office-test-');
+        try {
+            $zip = new \ZipArchive; $zip->open($path, \ZipArchive::OVERWRITE);
+            $zip->addFromString('word/document.xml', '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body><w:p><w:r><w:t>Hello &lt;script&gt;</w:t></w:r></w:p></w:body></w:document>');
+            $zip->close();
+            $file = (new FileManager)->upload(new UploadedFile($path, 'document.docx', null, null, true), null);
+            $result = app(\JobMetric\Media\FilePreview::class)->preview($file);
+            $this->assertSame('document', $result['kind']);
+            $this->assertSame('Hello <script>', $result['pages'][0]['paragraphs'][0]);
+        } finally { if (is_file($path)) unlink($path); }
+    }
     protected function getPackageProviders($app): array
     {
         return [MediaServiceProvider::class];

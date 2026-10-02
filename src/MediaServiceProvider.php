@@ -29,6 +29,7 @@ class MediaServiceProvider extends PackageCoreServiceProvider
      */
     public function configuration(PackageCore $package): void
     {
+        $this->app->singleton(FilePreviewRegistry::class);
         $package->name('media')
             ->hasConfig()
             ->hasTranslation()

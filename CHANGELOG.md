@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.2.0
+
+- Add an extensible, singleton server-side preview reader registry.
+- Add bounded, non-executable DOCX/PPTX paragraph and slide-text previews.
+- Accept extension-checked text, Markdown, STL/OBJ and additional audio/video formats.
+- Reject executable uploads and unsafe/oversized Office XML; no schema changes.
+
 ## 2.1.0
 
 - Add a storage-backed file-manager API for Unicode uploads, folders, rename, copy/move, conflict resolution and protected soft deletion.

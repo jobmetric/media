@@ -29,7 +29,10 @@ class FilePreview
             finally { if(is_resource($input)) fclose($input); if(is_resource($output)) fclose($output); }
         }
         $extension = mb_strtolower((string) ($item->extension ?: pathinfo($item->name, PATHINFO_EXTENSION)));
-        try { return match ($extension) {
+        try {
+            if ($reader = app(FilePreviewRegistry::class)->get($extension)) return $reader($path, $item, $options);
+            return match ($extension) {
+            'docx', 'pptx' => $this->office($path, $extension),
             'xls', 'xlsx', 'csv' => $this->spreadsheet($path, $item, $options),
             'zip' => $this->archive($path, $item, $options),
             default => [
@@ -39,6 +42,44 @@ class FilePreview
                 'url' => route('media.download', $item->id),
             ],
         }; } finally { if ($temporary && is_file($temporary)) unlink($temporary); }
+    }
+
+    /** Return bounded, non-executable OOXML document paragraphs or slide text. */
+    private function office(string $path, string $extension): array
+    {
+        $zip = new ZipArchive;
+        if ($zip->open($path) !== true) {
+            throw ValidationException::withMessages(['file' => trans('media::file-manager.preview_unavailable')]);
+        }
+        try {
+            $names = [];
+            for ($i = 0; $i < $zip->numFiles; $i++) {
+                $name = $zip->getNameIndex($i);
+                if (($extension === 'docx' && $name === 'word/document.xml') || ($extension === 'pptx' && preg_match('~^ppt/slides/slide\d+\.xml$~', $name))) $names[] = $name;
+            }
+            natsort($names);
+            if (count($names) > 300) throw ValidationException::withMessages(['file' => trans('media::file-manager.preview_unavailable')]);
+            $pages = []; $bytes = 0;
+            foreach ($names as $name) {
+                $stat = $zip->statName($name); $bytes += $stat['size'];
+                if ($bytes > 16 * 1024 * 1024) throw ValidationException::withMessages(['file' => trans('media::file-manager.preview_unavailable')]);
+                $xml = $zip->getFromName($name);
+                if (stripos($xml, '<!DOCTYPE') !== false || stripos($xml, '<!ENTITY') !== false) throw ValidationException::withMessages(['file' => trans('media::file-manager.preview_unavailable')]);
+                $document = new \DOMDocument;
+                $previous = libxml_use_internal_errors(true);
+                try { $loaded = $document->loadXML($xml, LIBXML_NONET); }
+                finally { libxml_clear_errors(); libxml_use_internal_errors($previous); }
+                if (!$loaded) throw ValidationException::withMessages(['file' => trans('media::file-manager.preview_unavailable')]);
+                $xpath = new \DOMXPath($document); $paragraphs = [];
+                foreach ($xpath->query('//*[local-name()="p"]') as $paragraph) {
+                    $text = '';
+                    foreach ($xpath->query('.//*[local-name()="t"]', $paragraph) as $run) $text .= $run->textContent;
+                    if (trim($text) !== '') $paragraphs[] = $text;
+                }
+                $pages[] = ['paragraphs' => $paragraphs];
+            }
+            return ['kind' => $extension === 'pptx' ? 'presentation' : 'document', 'pages' => $pages];
+        } finally { $zip->close(); }
     }
 
     /** @return array<string, mixed> */

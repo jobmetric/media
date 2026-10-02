@@ -15,6 +15,9 @@ class FileManagerTest extends TestCase
 {
     public function test_text_formats_and_custom_preview_reader(): void
     {
+        $this->assertSame('audio', getMimeGroup('audio/x-wav'));
+        $this->assertSame('document', getMimeGroup('text/plain'));
+        $this->assertSame('document', getMimeGroup('model/stl'));
         $files = new FileManager;
         $file = $files->upload(UploadedFile::fake()->createWithContent('notes.md', '# Safe preview'), null);
         $this->assertSame('md', $file->extension);

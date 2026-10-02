@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.1
+
+- Resolve MIME groups for additional audio/video formats and text/model documents without nullable return failures.
+
 ## 2.2.0
 
 - Add an extensible, singleton server-side preview reader registry.

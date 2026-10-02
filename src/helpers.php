@@ -12,7 +12,8 @@ if (!function_exists('getMimeGroup')) {
     {
         $config_mime_types = config('media.mime_type');
 
-        $mime_group = null;
+        $prefix = strtok($mime_type, '/');
+        $mime_group = in_array($prefix, ['image', 'audio', 'video'], true) ? $prefix : 'document';
         foreach ($config_mime_types as $group => $mime_types) {
             if (in_array($mime_type, $mime_types)) {
                 $mime_group = $group;
